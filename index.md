@@ -175,7 +175,7 @@ library(rpisco)
 
 # Ver todo el catálogo de productos disponibles
 pisco_catalog()
-#> # A tibble: 14 × 13
+#> # A tibble: 16 × 13
 #>    dataset     variable product filename timestep period layers resolution unit 
 #>    <chr>       <chr>    <chr>   <chr>    <chr>    <chr>   <int> <chr>      <chr>
 #>  1 monthly     precipi… PISCOp… PISCOp_… monthly  1981-…    540 0.10 deg … mm/m…
@@ -192,6 +192,8 @@ pisco_catalog()
 #> 12 streamflow… streamf… PISCO_… PISCO_A… daily    1981-…  14610 river rea… m3/s 
 #> 13 catchments… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…
 #> 14 rivers_gr2m streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
+#> 15 catchments… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…
+#> 16 rivers_arn… streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
 #> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
 #> #   download_url <chr>
 
@@ -231,13 +233,15 @@ pisco_catalog(variable = "erosivity")
 #> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
 #> #   download_url <chr>
 pisco_catalog(variable = "streamflow")
-#> # A tibble: 4 × 13
+#> # A tibble: 6 × 13
 #>   dataset      variable product filename timestep period layers resolution unit 
 #>   <chr>        <chr>    <chr>   <chr>    <chr>    <chr>   <int> <chr>      <chr>
 #> 1 streamflow_… streamf… PISCO_… PISCO_G… monthly  1981-…    480 river rea… m3/s 
 #> 2 streamflow_… streamf… PISCO_… PISCO_A… daily    1981-…  14610 river rea… m3/s 
 #> 3 catchments_… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…
 #> 4 rivers_gr2m  streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
+#> 5 catchments_… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…
+#> 6 rivers_arno… streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
 #> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
 #> #   download_url <chr>
 
@@ -299,10 +303,10 @@ lo reutiliza sin conexiones de red:
 ``` r
 
 library(terra)
-#> terra 1.9.46
 
-# Descargar precipitación mensual (una sola vez, salvo `overwrite = TRUE`)
+# Descargar precipitación mensual y normal climatológica (una sola vez)
 pisco_download("monthly")
+pisco_download("climatology")
 
 # Cargar precipitación mensual desde la caché (1981-2025, 540 capas)
 pr_m <- pisco_read("monthly")
@@ -320,17 +324,13 @@ pr_nino <- pisco_read("monthly", dates = c(1997, 1998))
 
 ``` r
 
-# Climatología normal mensual de temperatura máxima (°C)
+# Descargar y cargar climatología normal mensual de temperatura máxima (°C)
+pisco_download("tmax_clim")
 tmax_clim <- pisco_read("tmax_clim")
 plot(tmax_clim[[1]], main = "PISCOt - Tmax Normal Enero (°C)")
-```
-
-![](reference/figures/README-unnamed-chunk-4-1.png)
-
-``` r
-
 
 # Climatología de temperatura mínima (°C)
+pisco_download("tmin_clim")
 tmin_clim <- pisco_read("tmin_clim")
 
 # Serie mensual de temperatura máxima (1981-2016)
@@ -343,24 +343,14 @@ tmin_clim <- pisco_read("tmin_clim")
 
 ``` r
 
-library(tidyverse)
-#> ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
-#> ✔ dplyr     1.2.1     ✔ readr     2.2.0
-#> ✔ forcats   1.0.1     ✔ stringr   1.6.0
-#> ✔ ggplot2   4.0.3     ✔ tibble    3.3.1
-#> ✔ lubridate 1.9.5     ✔ tidyr     1.3.2
-#> ✔ purrr     1.2.2     
-#> ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ tidyr::extract() masks terra::extract()
-#> ✖ dplyr::filter()  masks stats::filter()
-#> ✖ dplyr::lag()     masks stats::lag()
-#> ℹ Use the conflicted package (<http://conflicted.r-lib.org/>) to force all conflicts to become errors
-# 1. Definir región de interés (Centro del Perú: Costa y Andes)
-# c(xmin, ymin, xmax, ymax)
+library(ggplot2)
+
+# 1. Descargar y recortar ETo para la región de interés (Centro del Perú: Costa y Andes)
+pisco_download("eto_clim")
 aoi_centro <- c(-77.5, -12.5, -75.0, -11.0)
-# 2. Leer eto_clim recortado directamente (se ejecuta en milisegundos)
 eto_centro <- pisco_read("eto_clim", aoi = aoi_centro)
-# 3. Formato largo
+
+# 2. Convertir a formato largo para graficar
 df_anual <- as.data.frame(eto_centro, xy = TRUE)
 df_largo <- reshape(
   df_anual,
@@ -373,7 +363,8 @@ df_largo <- reshape(
 meses_nombres <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", 
                    "Jul", "Ago", "Set", "Oct", "Nov", "Dic")
 df_largo$mes <- factor(meses_nombres[df_largo$mes_idx], levels = meses_nombres)
-# 4. Gráfico facetado de la cuenca
+
+# 3. Gráfico facetado mensual
 ggplot(df_largo, aes(x = x, y = y, fill = eto)) +
   geom_raster() +
   facet_wrap(~ mes, ncol = 4) +
@@ -395,22 +386,13 @@ ggplot(df_largo, aes(x = x, y = y, fill = eto)) +
     strip.text = element_text(face = "bold"),
     legend.position = "bottom"
   )
-```
 
-![](reference/figures/README-unnamed-chunk-5-1.png)
-
-``` r
-
-
-
-# 1. Leer el factor R de erosividad (20 capas anuales: 2001 a 2020)
+# 4. Factor R de erosividad (20 capas anuales: 2001 a 2020)
+pisco_download("erosivity_r")
 eros_r <- pisco_read("erosivity_r")
-
-# 2. Convertir la capa del año 2020 a data.frame con coordenadas (lon, lat)
 df_eros <- as.data.frame(eros_r[["year_2020"]], xy = TRUE)
 colnames(df_eros) <- c("lon", "lat", "factor_r")
 
-# 3. Gráfico con ggplot2
 ggplot(df_eros, aes(x = lon, y = lat, fill = factor_r)) +
   geom_raster(interpolate = FALSE) +
   scale_fill_viridis_c(
@@ -432,8 +414,6 @@ ggplot(df_eros, aes(x = lon, y = lat, fill = factor_r)) +
   )
 ```
 
-![](reference/figures/README-unnamed-chunk-5-2.png)
-
 ------------------------------------------------------------------------
 
 ### 5. Caudales Hidrológicos y Capas Vectoriales (PISCO_HyM)
@@ -444,52 +424,18 @@ vectoriales de cuencas y ríos directamente en formato `sf`:
 ``` r
 
 library(sf)
-#> Linking to GEOS 3.14.1, GDAL 3.12.1, PROJ 9.7.1; sf_use_s2() is TRUE
 
-# Leer polígonos de subcuencas del modelo GR2M como objeto sf
-cuencas_gr2m <- pisco_read("cat_pisco_gr2m")
-#> ℹ Dataset 'catchments_gr2m' not found in cache. Starting download...
-#> 
-#> ── Downloading PISCO dataset: catchments_gr2m (cat_pisco_gr2m) ──
-#> 
-#> ℹ Variable: "streamflow" | File: "cat_pisco_gr2m_v2.0.gpkg" | Size: ~100.46 MB
-#> ℹ Period: "1981-2020" | Resolution: "vector polygons"
-#> ℹ Source: HydroShare repository
-#> ✔ Dataset saved successfully to: 'C:\Users\PC\AppData\Local/R/cache/R/rpisco/cat_pisco_gr2m_v2.0.gpkg'
+# Descargar y leer polígonos de subcuencas del modelo GR2M como objeto sf
+pisco_download("catchments_gr2m")
+cuencas_gr2m <- pisco_read("catchments_gr2m")
 head(cuencas_gr2m)
-#> Simple feature collection with 6 features and 8 fields
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -78.005 ymin: -0.245 xmax: -77.72167 ymax: 0.2733333
-#> Geodetic CRS:  WGS 84
-#>   HydroID OBJECTID GridID NextDownID   COMID Shape_Leng Shape_Area Tot_Drain_
-#> 1   20302    20302  21958      20587 9022991  103156.32  249416660  249416660
-#> 2   20315    20315  21972      20325 9023426   93137.37  221490537  221490537
-#> 3   20325    20325  21982      20632 9023766   83118.58  169177071  571763415
-#> 4   20339    20339  21996      20325 9023659   93137.33  181095807  181095807
-#> 5   20345    20345  22002      20632 9023765   71801.12  117070405  117070405
-#> 6   20367    20367  22027      20376 9024254   64565.47   97002478   97002478
-#>                             geom
-#> 1 MULTIPOLYGON (((-77.82583 0...
-#> 2 MULTIPOLYGON (((-77.98917 0...
-#> 3 MULTIPOLYGON (((-77.78667 -...
-#> 4 MULTIPOLYGON (((-77.96917 -...
-#> 5 MULTIPOLYGON (((-77.865 -0....
-#> 6 MULTIPOLYGON (((-77.92083 -...
 
 # Leer red de ríos principales
-rios_gr2m <- pisco_read("riv_pisco_gr2m")
-#> ℹ Dataset 'rivers_gr2m' not found in cache. Starting download...
-#> 
-#> ── Downloading PISCO dataset: rivers_gr2m (riv_pisco_gr2m) ──
-#> 
-#> ℹ Variable: "streamflow" | File: "riv_pisco_gr2m_v2.0.gpkg" | Size: ~15.18 MB
-#> ℹ Period: "1981-2020" | Resolution: "vector lines"
-#> ℹ Source: HydroShare repository
-#> ✔ Dataset saved successfully to: 'C:\Users\PC\AppData\Local/R/cache/R/rpisco/riv_pisco_gr2m_v2.0.gpkg'
+pisco_download("rivers_gr2m")
+rios_gr2m <- pisco_read("rivers_gr2m")
 
 # Leer grilla de caudales mensuales simulados
-# q_gr2m <- pisco_read("pisco_gr2m", dates = 2010)
+# q_gr2m <- pisco_read("streamflow_monthly", dates = 2010, download = TRUE)
 ```
 
 ------------------------------------------------------------------------
@@ -521,15 +467,6 @@ meteorológicas) o promedios zonales por cuenca:
 # Extraer serie temporal mensual para Cusco (lon = -71.96, lat = -13.53)
 serie_cusco <- pisco_extract(pr_m, points = c(lon = -71.96, lat = -13.53))
 head(serie_cusco)
-#> # A tibble: 6 × 5
-#>      id   lon   lat date       precipitation
-#>   <int> <dbl> <dbl> <date>             <dbl>
-#> 1     1 -72.0 -13.5 1981-01-01        206.  
-#> 2     1 -72.0 -13.5 1981-02-01        135.  
-#> 3     1 -72.0 -13.5 1981-03-01        108.  
-#> 4     1 -72.0 -13.5 1981-04-01         26.2 
-#> 5     1 -72.0 -13.5 1981-05-01          3.54
-#> 6     1 -72.0 -13.5 1981-06-01          6.29
 ```
 
 ------------------------------------------------------------------------
