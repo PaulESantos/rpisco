@@ -1,109 +1,129 @@
 ---
-title: "Precipitación PISCO para el distrito de Anta, Cusco"
+title: "Precipitación PISCO para la provincia de Anta, Cusco"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Precipitación PISCO para Anta, Cusco}
+  %\VignetteIndexEntry{Precipitación PISCO para la provincia de Anta, Cusco}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
 ```
 
-Este ejemplo obtiene el límite oficial del distrito de **Anta**, provincia de
-**Anta**, departamento de **Cusco**, y calcula la precipitación mensual media
-espacial de PISCOp para 2020--2024. `geoperu` entrega límites administrativos
-del INEI como objetos `sf`, que se pueden usar directamente con `rpisco`.
+Este artículo muestra cómo obtener los límites oficiales de la **provincia de Anta** (departamento de **Cusco**), conformada por sus 9 distritos (Anta, Ancahuasi, Cachimayo, Chinchaypujio, Huarocondo, Limatambo, Mollepata, Pucyura y Zurite), y cómo procesar la precipitación mensual grillada de PISCOp v3.0 para el periodo 2020–2024 utilizando `geoperu` y `rpisco`.
 
-No se ejecuta código en esta viñeta: la descarga de PISCO es una acción
-explícita del usuario y el archivo mensual ocupa aproximadamente 54 MB.
+> **Nota:** Los bloques de código que descargan o procesan archivos NetCDF de gran tamaño están configurados con `eval = FALSE` para permitir la compilación rápida y fuera de línea de la viñeta conforme a las directivas de CRAN.
 
-## Paquetes
+## Paquetes Requeridos
 
 ```{r, eval = FALSE}
-# Instalar una sola vez, si fuera necesario
-install.packages("geoperu")
-# pak::pak("PaulESantos/rpisco")  # versión de desarrollo de rpisco
+# Instalar los paquetes si no están instalados
+# install.packages("geoperu")
+# pak::pak("PaulESantos/rpisco")
 
 library(geoperu)
 library(rpisco)
+library(sf)
+library(terra)
 ```
 
-## 1. Obtener y verificar el distrito
+## 1. Obtención de los Límites de la Provincia de Anta
 
-Se consulta Cusco sin simplificar para obtener los polígonos distritales; luego
-se filtra con ambos nombres administrativos. Usar los dos campos evita confundir
-un distrito homónimo de otra provincia.
+A través de `geoperu`, se descarga la cartografía oficial del INEI para la provincia de **Anta**:
 
 ```{r, eval = FALSE}
-cusco_distritos <- geoperu::get_geo_peru(
-  geography = "CUSCO",
-  level = "dep",
+# Descargar límites de la provincia de Anta (incluye sus 9 distritos)
+anta_provincia <- geoperu::get_geo_peru(
+  geography = "ANTA",
+  level = "prov",
   simplified = FALSE,
   showProgress = FALSE
 )
 
-anta <- cusco_distritos[
-  cusco_distritos$provincia == "ANTA" &
-    cusco_distritos$distrito == "ANTA",
-]
-
-stopifnot(nrow(anta) == 1L)
-anta[, c("departamento", "provincia", "distrito")]
+# Verificar distritos contenidos
+print(anta_provincia[, c("departamento", "provincia", "distrito")])
 ```
 
-## 2. Descargar PISCOp mensual una vez
-
-Esta llamada es el consentimiento explícito para descargar. `rpisco` conserva el
-NetCDF en su caché de usuario; en ejecuciones posteriores `pisco_read()` usa ese
-archivo local y no inicia ninguna descarga.
+Si se desea obtener un único polígono envolvente de toda la provincia consolidada:
 
 ```{r, eval = FALSE}
+# Unir los distritos en un único polígono provincial
+anta_limite_total <- sf::st_union(anta_provincia)
+```
+
+## 2. Descarga Explícita del Producto PISCOp Mensual
+
+`rpisco` requiere autorización explícita para la descarga de datos mediante `pisco_download()`. El archivo NetCDF (~56 MB) se almacena en la caché de usuario (`tools::R_user_dir`), evitando descargas redundantes en sesiones futuras:
+
+```{r, eval = FALSE}
+# Descargar PISCOp v3.0 mensual (1981-2025)
 pisco_download("monthly")
+
+# Verificar el estado de la caché local
 pisco_cache_status()
 ```
 
-## 3. Recuperar la precipitación del área
+## 3. Extracción de Series Temporales de Precipitación
 
-`pisco_read()` carga únicamente los meses solicitados. `pisco_extract()` calcula
-la media de las celdas que intersectan el polígono y retorna una tabla ordenada.
-La unidad de `precipitation` es **mm/mes**.
+Se cargan las capas correspondientes al periodo 2020–2024 y se calculan las medias zonales mensuales para cada distrito de la provincia de Anta utilizando `pisco_extract()`:
 
 ```{r, eval = FALSE}
+# Leer solo los años 2020 a 2024 desde la caché local
 pisco_mensual <- pisco_read(
   dataset = "monthly",
   dates = 2020:2024
 )
 
-precipitacion_anta <- pisco_extract(
+# Extraer el promedio espacial mensual (mm/mes) por distrito
+precipitacion_distrital <- pisco_extract(
   x = pisco_mensual,
-  polygons = anta,
+  polygons = anta_provincia,
   id_col = "distrito",
   fun = mean
 )
 
-head(precipitacion_anta)
+head(precipitacion_distrital)
 ```
 
-Para trabajar solamente con las celdas del distrito (por ejemplo, para crear un
-mapa), se puede recortar y enmascarar el raster:
+Para obtener una única serie promedio consolidada para toda la provincia:
 
 ```{r, eval = FALSE}
-pisco_anta <- pisco_clip(pisco_mensual, mask = anta)
-plot(pisco_anta[[1]], main = "Precipitación en Anta: enero de 2020")
-plot(sf::st_geometry(anta), add = TRUE, border = "black", lwd = 2)
+# Extraer el promedio espacial para toda la provincia consolidada
+precipitacion_provincial <- pisco_extract(
+  x = pisco_mensual,
+  polygons = anta_provincia,
+  id_col = "provincia",
+  fun = mean
+)
+
+head(precipitacion_provincial)
 ```
 
-## 4. Guardar la serie resultante
+## 4. Recorte y Enmascaramiento Espacial (`pisco_clip`)
 
-La exportación también es deliberada. El CSV contiene una fila por mes y la
-precipitación media areal del distrito.
+Para aislar y visualizar la cuadrícula espacial de precipitación sobre el ámbito territorial de la provincia de Anta, se utiliza la función optimizada `pisco_clip()`:
+
+```{r, eval = FALSE}
+# Recortar y enmascarar la grilla raster al límite de la provincia
+pisco_anta <- pisco_clip(pisco_mensual, mask = anta_provincia)
+
+# Visualizar la precipitación del primer mes (enero de 2020)
+plot(pisco_anta[[1]], main = "Precipitación en la Provincia de Anta (Ene 2020) - mm/mes")
+plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.5)
+```
+
+## 5. Exportar Resultados
+
+Las series temporales extraídas pueden guardarse como un archivo CSV para análisis hidrológicos o climáticos posteriores:
 
 ```{r, eval = FALSE}
 utils::write.csv(
-  precipitacion_anta,
-  file = "precipitacion_mensual_anta_cusco_2020_2024.csv",
+  precipitacion_distrital,
+  file = "precipitacion_mensual_provincia_anta_distritos_2020_2024.csv",
   row.names = FALSE
 )
 ```

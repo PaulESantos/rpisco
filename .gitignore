@@ -47,6 +47,8 @@ inst/doc/
 walkthrough.md
 scratch/
 README.html
+vignettes/*.html
+
 
 
 # IDE / Editors
