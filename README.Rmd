@@ -145,11 +145,12 @@ pisco_citation(variable = "streamflow", format = "bibtex")
 
 Primero se solicita la descarga explícitamente. El archivo queda en la caché local y `pisco_read()` lo reutiliza sin conexiones de red:
 
-```{r}
+```{r, eval = FALSE}
 library(terra)
 
-# Descargar precipitación mensual (una sola vez, salvo `overwrite = TRUE`)
+# Descargar precipitación mensual y normal climatológica (una sola vez)
 pisco_download("monthly")
+pisco_download("climatology")
 
 # Cargar precipitación mensual desde la caché (1981-2025, 540 capas)
 pr_m <- pisco_read("monthly")
@@ -165,12 +166,14 @@ pr_nino <- pisco_read("monthly", dates = c(1997, 1998))
 
 ### 3. Temperatura del Aire (PISCOt v1.2)
 
-```{r}
-# Climatología normal mensual de temperatura máxima (°C)
+```{r, eval = FALSE}
+# Descargar y cargar climatología normal mensual de temperatura máxima (°C)
+pisco_download("tmax_clim")
 tmax_clim <- pisco_read("tmax_clim")
 plot(tmax_clim[[1]], main = "PISCOt - Tmax Normal Enero (°C)")
 
 # Climatología de temperatura mínima (°C)
+pisco_download("tmin_clim")
 tmin_clim <- pisco_read("tmin_clim")
 
 # Serie mensual de temperatura máxima (1981-2016)
@@ -181,14 +184,15 @@ tmin_clim <- pisco_read("tmin_clim")
 
 ### 4. Evapotranspiración de Referencia y Erosividad
 
-```{r}
-library(tidyverse)
-# 1. Definir región de interés (Centro del Perú: Costa y Andes)
-# c(xmin, ymin, xmax, ymax)
+```{r, eval = FALSE}
+library(ggplot2)
+
+# 1. Descargar y recortar ETo para la región de interés (Centro del Perú: Costa y Andes)
+pisco_download("eto_clim")
 aoi_centro <- c(-77.5, -12.5, -75.0, -11.0)
-# 2. Leer eto_clim recortado directamente (se ejecuta en milisegundos)
 eto_centro <- pisco_read("eto_clim", aoi = aoi_centro)
-# 3. Formato largo
+
+# 2. Convertir a formato largo para graficar
 df_anual <- as.data.frame(eto_centro, xy = TRUE)
 df_largo <- reshape(
   df_anual,
@@ -201,7 +205,8 @@ df_largo <- reshape(
 meses_nombres <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun", 
                    "Jul", "Ago", "Set", "Oct", "Nov", "Dic")
 df_largo$mes <- factor(meses_nombres[df_largo$mes_idx], levels = meses_nombres)
-# 4. Gráfico facetado de la cuenca
+
+# 3. Gráfico facetado mensual
 ggplot(df_largo, aes(x = x, y = y, fill = eto)) +
   geom_raster() +
   facet_wrap(~ mes, ncol = 4) +
@@ -224,15 +229,12 @@ ggplot(df_largo, aes(x = x, y = y, fill = eto)) +
     legend.position = "bottom"
   )
 
-
-# 1. Leer el factor R de erosividad (20 capas anuales: 2001 a 2020)
+# 4. Factor R de erosividad (20 capas anuales: 2001 a 2020)
+pisco_download("erosivity_r")
 eros_r <- pisco_read("erosivity_r")
-
-# 2. Convertir la capa del año 2020 a data.frame con coordenadas (lon, lat)
 df_eros <- as.data.frame(eros_r[["year_2020"]], xy = TRUE)
 colnames(df_eros) <- c("lon", "lat", "factor_r")
 
-# 3. Gráfico con ggplot2
 ggplot(df_eros, aes(x = lon, y = lat, fill = factor_r)) +
   geom_raster(interpolate = FALSE) +
   scale_fill_viridis_c(
@@ -260,18 +262,20 @@ ggplot(df_eros, aes(x = lon, y = lat, fill = factor_r)) +
 
 `rpisco` permite leer tanto las grillas de caudales como las capas vectoriales de cuencas y ríos directamente en formato `sf`:
 
-```{r}
+```{r, eval = FALSE}
 library(sf)
 
-# Leer polígonos de subcuencas del modelo GR2M como objeto sf
-cuencas_gr2m <- pisco_read("cat_pisco_gr2m")
+# Descargar y leer polígonos de subcuencas del modelo GR2M como objeto sf
+pisco_download("catchments_gr2m")
+cuencas_gr2m <- pisco_read("catchments_gr2m")
 head(cuencas_gr2m)
 
 # Leer red de ríos principales
-rios_gr2m <- pisco_read("riv_pisco_gr2m")
+pisco_download("rivers_gr2m")
+rios_gr2m <- pisco_read("rivers_gr2m")
 
 # Leer grilla de caudales mensuales simulados
-# q_gr2m <- pisco_read("pisco_gr2m", dates = 2010)
+# q_gr2m <- pisco_read("streamflow_monthly", dates = 2010, download = TRUE)
 ```
 
 ---
@@ -280,7 +284,7 @@ rios_gr2m <- pisco_read("riv_pisco_gr2m")
 
 Puedes recortar cualquier grilla directamente durante la lectura mediante el argumento `aoi` o usando `pisco_clip()`:
 
-```{r}
+```{r, eval = FALSE}
 # Recortar por límites geográficos (ej. Cuenca del Rímac / Lima: xmin, ymin, xmax, ymax)
 pr_rimac <- pisco_read("monthly", dates = 1998, aoi = c(-77.2, -12.4, -75.8, -11.4))
 
@@ -294,11 +298,10 @@ pr_rimac <- pisco_read("monthly", dates = 1998, aoi = c(-77.2, -12.4, -75.8, -11
 
 Extrae series de tiempo para puntos específicos (estaciones meteorológicas) o promedios zonales por cuenca:
 
-```{r}
+```{r, eval = FALSE}
 # Extraer serie temporal mensual para Cusco (lon = -71.96, lat = -13.53)
 serie_cusco <- pisco_extract(pr_m, points = c(lon = -71.96, lat = -13.53))
 head(serie_cusco)
-
 ```
 
 ---
@@ -309,7 +312,7 @@ SENAMHI define dos periodos hidrológicos característicos para el Perú:
 - **Temporada húmeda:** Noviembre a Abril (`season_senamhi`).
 - **Temporada seca:** Mayo a Octubre.
 
-```{r}
+```{r, eval = FALSE}
 # Totales anuales acumulados (mm/año)
 pr_anual <- pisco_aggregate(pr_m, by = "year", fun = "sum")
 
@@ -326,7 +329,7 @@ pr_ciclo <- pisco_aggregate(pr_m, by = "month", fun = "mean")
 
 Calcula anomalías mensuales relativas (%) o absolutas respecto a una climatología base:
 
-```{r}
+```{r, eval = FALSE}
 # Anomalías porcentuales (%) durante El Niño 1997-1998
 anom_pct <- pisco_anomaly(pr_nino, baseline = pr_clim, type = "percentage")
 
