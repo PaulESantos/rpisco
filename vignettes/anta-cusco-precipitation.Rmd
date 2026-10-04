@@ -24,7 +24,7 @@ explícita del usuario y el archivo mensual ocupa aproximadamente 54 MB.
 ```{r, eval = FALSE}
 # Instalar una sola vez, si fuera necesario
 install.packages("geoperu")
-# pak::pak("pefrens/rpisco")  # versión de desarrollo de rpisco
+# pak::pak("PaulESantos/rpisco")  # versión de desarrollo de rpisco
 
 library(geoperu)
 library(rpisco)

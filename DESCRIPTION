@@ -27,8 +27,8 @@ Description: Provides programmatic access, local caching, spatial subsetting,
     for basin-scale extraction, seasonal aggregations, and spatial raster and
     vector processing based on 'terra' and 'sf'.
 License: MIT + file LICENSE
-URL: https://github.com/pefrens/rpisco, https://pefrens.github.io/rpisco/
-BugReports: https://github.com/pefrens/rpisco/issues
+URL: https://github.com/PaulESantos/rpisco, https://PaulESantos.github.io/rpisco/
+BugReports: https://github.com/PaulESantos/rpisco/issues
 Depends: 
     R (>= 4.1.0)
 Imports: 

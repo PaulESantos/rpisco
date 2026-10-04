@@ -10,9 +10,9 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 [![License:
 MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://img.shields.io/badge/DOI-10.6084%2Fm9.figshare.32411886-blue.svg)](https://doi.org/10.6084/m9.figshare.32411886)
-[![R-CMD-check](https://github.com/pefrens/rpisco/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/pefrens/rpisco/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/PaulESantos/rpisco/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PaulESantos/rpisco/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
-coverage](https://codecov.io/gh/pefrens/rpisco/graph/badge.svg)](https://app.codecov.io/gh/pefrens/rpisco)
+coverage](https://codecov.io/gh/PaulESantos/rpisco/graph/badge.svg)](https://app.codecov.io/gh/PaulESantos/rpisco)
 <!-- badges: end -->
 
 El paquete **`rpisco`** proporciona acceso programático, descarga con
@@ -163,10 +163,10 @@ Puedes instalar la versión de desarrollo de **rpisco** desde GitHub con:
 
 ``` r
 # install.packages("pak")
-pak::pak("pefrens/rpisco")
+pak::pak("PaulESantos/rpisco")
 
 # O mediante remotes / devtools:
-# devtools::install_github("pefrens/rpisco")
+# devtools::install_github("PaulESantos/rpisco")
 ```
 
 ------------------------------------------------------------------------

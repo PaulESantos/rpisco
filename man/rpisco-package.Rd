@@ -33,9 +33,9 @@ for links, dataset keys, and scientific citations.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/pefrens/rpisco}
-  \item \url{https://pefrens.github.io/rpisco/}
-  \item Report bugs at \url{https://github.com/pefrens/rpisco/issues}
+  \item \url{https://github.com/PaulESantos/rpisco}
+  \item \url{https://PaulESantos.github.io/rpisco/}
+  \item Report bugs at \url{https://github.com/PaulESantos/rpisco/issues}
 }
 
 }
