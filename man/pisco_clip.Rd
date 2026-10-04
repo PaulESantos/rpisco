@@ -4,7 +4,7 @@
 \alias{pisco_clip}
 \title{Spatial Cropping and Masking for PISCO Rasters}
 \usage{
-pisco_clip(x, mask, crop_only = FALSE)
+pisco_clip(x, mask, crop_only = FALSE, touches = TRUE, ...)
 }
 \arguments{
 \item{x}{A \link[terra:SpatRaster]{terra::SpatRaster} object.}
@@ -14,6 +14,11 @@ or numeric bounding box (\code{c(xmin, ymin, xmax, ymax)}).}
 
 \item{crop_only}{Logical. If \code{TRUE}, only crops to bounding box without masking values outside polygon.
 Default is \code{FALSE}.}
+
+\item{touches}{Logical. If \code{TRUE}, all cells touched by polygon boundaries are included in the mask.
+Default is \code{TRUE} (matching default \code{\link[terra:mask]{terra::mask()}} behavior).}
+
+\item{...}{Additional arguments passed directly to \code{\link[terra:crop]{terra::crop()}}.}
 }
 \value{
 A cropped (and optionally masked) \link[terra:SpatRaster]{terra::SpatRaster}.

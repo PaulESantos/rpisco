@@ -1,7 +1,7 @@
 test_that("pisco_catalog returns expected structure and products across variables", {
   cat_all <- pisco_catalog("all")
   expect_s3_class(cat_all, "tbl_df")
-  expect_gte(nrow(cat_all), 12)
+  expect_gte(nrow(cat_all), 14)
   
   expected_cols <- c("dataset", "variable", "product", "filename",
                      "timestep", "period", "layers", "resolution",
@@ -26,7 +26,7 @@ test_that("pisco_catalog returns expected structure and products across variable
   expect_setequal(cat_ero$product, c("PISCOa_re", "PISCOa_ed"))
   
   cat_q <- pisco_catalog("streamflow")
-  expect_equal(nrow(cat_q), 4)
+  expect_equal(nrow(cat_q), 6)
   expect_true(all(cat_q$source == "HydroShare"))
 })
 
@@ -62,6 +62,8 @@ test_that("dataset alias resolver works for all variables", {
   expect_equal(.pisco_resolve_dataset("pisco_gr2m"), "streamflow_monthly")
   expect_equal(.pisco_resolve_dataset("streamflow_daily"), "streamflow_daily")
   expect_equal(.pisco_resolve_dataset("pisco_arnovic"), "streamflow_daily")
+  expect_equal(.pisco_resolve_dataset("cat_pisco_arnovic"), "catchments_arnovic")
+  expect_equal(.pisco_resolve_dataset("riv_pisco_arnovic"), "rivers_arnovic")
   
   expect_error(.pisco_resolve_dataset("unknown_dataset_xyz"))
 })

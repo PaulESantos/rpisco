@@ -12,7 +12,7 @@ pisco_read(
   dates = NULL,
   aoi = NULL,
   mask = NULL,
-  download = TRUE
+  download = FALSE
 )
 }
 \arguments{
@@ -22,12 +22,14 @@ pisco_read(
 \item Temperature: \code{"tmax_daily"}, \code{"tmin_daily"}, \code{"tmax_clim"}, \code{"tmin_clim"}.
 \item Evapotranspiration: \code{"eto_clim"} (\code{"PISCOeo_pm"}).
 \item Erosivity: \code{"erosivity_r"}, \code{"erosivity_density"}.
-\item Streamflow: \code{"streamflow_monthly"}, \code{"streamflow_daily"}, \code{"catchments_gr2m"}, \code{"rivers_gr2m"}.
+\item Streamflow: \code{"streamflow_monthly"}, \code{"streamflow_daily"},
+\code{"catchments_gr2m"}, \code{"rivers_gr2m"}, \code{"catchments_arnovic"}, or
+\code{"rivers_arnovic"}.
 Default is \code{"monthly"}.
 }}
 
 \item{file}{Character. Optional custom path to a PISCO NetCDF or GeoPackage file.
-If \code{NULL}, looks in the local cache or downloads automatically.}
+If \code{NULL}, looks in the local cache.}
 
 \item{dates}{Vector of dates, years, year-months, or indices to filter layers.
 \itemize{
@@ -41,8 +43,8 @@ to crop/mask the raster upon reading. Alias for \code{mask}.}
 
 \item{mask}{Optional spatial mask. Same as \code{aoi}.}
 
-\item{download}{Logical. If \code{TRUE} and file is not cached, downloads it automatically.
-Default is \code{TRUE}.}
+\item{download}{Logical. If \code{TRUE} and file is not cached, downloads it after
+this explicit request. Default is \code{FALSE} to avoid implicit network access.}
 }
 \value{
 A \link[terra:SpatRaster]{terra::SpatRaster} object (for gridded data) or an \code{sf} object (for vector hydrography).
@@ -50,7 +52,8 @@ A \link[terra:SpatRaster]{terra::SpatRaster} object (for gridded data) or an \co
 \description{
 Reads a PISCO dataset into memory or memory-mapped objects (\link[terra:SpatRaster]{terra::SpatRaster}
 for raster grids, or \code{sf} for catchment/river vector layers). If the file is
-not present locally, it can be downloaded automatically if \code{download = TRUE}.
+not present locally, it can be downloaded after the caller explicitly sets
+\code{download = TRUE}.
 }
 \examples{
 \dontrun{

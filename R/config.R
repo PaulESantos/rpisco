@@ -6,6 +6,14 @@
 .pisco_portal <- "https://sites.google.com/view/dhi-seh/pisco"
 .pisco_crs <- "EPSG:4326"
 
+# Public resource identifiers used to refresh file metadata on demand.  These
+# are metadata endpoints only: they never download a PISCO data file.
+.pisco_figshare_articles <- c(piscop_v3 = "32411886")
+.pisco_hydroshare_resources <- c(
+  gr2m = "f1b537f338f24533af5dab946b51d215",
+  arnovic = "f723d6c762ca45b6936dd9489bc44842"
+)
+
 # Official geographic coverage for Peru and transboundary basins
 .pisco_extent <- c(xmin = -82.0, ymin = -19.0, xmax = -64.0, ymax = 2.0)
 
@@ -266,8 +274,51 @@
     unit = "streamlines",
     source = "HydroShare",
     description = "River network streamlines (GPKG) for PISCO GR2M streamflow reaches"
+  ),
+  catchments_arnovic = list(
+    variable = "streamflow",
+    product = "cat_pisco_arnovic",
+    filename = "cat_pisco_arnovic_v1.1.gpkg",
+    figshare_file_id = NA_integer_,
+    download_url = "https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/data/contents/cat_pisco_arnovic_v1.1.gpkg",
+    md5 = NA_character_,
+    size_bytes = 105340928L,
+    size_mb = 100.46,
+    resolution = "vector polygons",
+    timestep = "static",
+    period = "1981-2020",
+    layers = 1L,
+    unit = "boundaries",
+    source = "HydroShare",
+    description = "Catchment delineations (GPKG) for PISCO ARNOVIC streamflow reaches"
+  ),
+  rivers_arnovic = list(
+    variable = "streamflow",
+    product = "riv_pisco_arnovic",
+    filename = "riv_pisco_arnovic_v1.1.gpkg",
+    figshare_file_id = NA_integer_,
+    download_url = "https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/data/contents/riv_pisco_arnovic_v1.1.gpkg",
+    md5 = NA_character_,
+    size_bytes = 15917056L,
+    size_mb = 15.18,
+    resolution = "vector lines",
+    timestep = "static",
+    period = "1981-2020",
+    layers = 1L,
+    unit = "streamlines",
+    source = "HydroShare",
+    description = "River network streamlines (GPKG) for PISCO ARNOVIC streamflow reaches"
   )
 )
+
+# Keep refreshed metadata outside the locked package namespace. The bundled
+# object above remains the offline fallback distributed with the package.
+.pisco_catalog_state <- new.env(parent = emptyenv())
+.pisco_catalog_state$files <- .pisco_files
+
+.pisco_current_files <- function() {
+  .pisco_catalog_state$files
+}
 
 #' Resolve Dataset Aliases Across PISCO Variables
 #'
@@ -335,9 +386,15 @@
   if (key %in% c("rivers_gr2m", "riv_pisco_gr2m", "riv_pisco_gr2m_v2.0", "rios_gr2m")) {
     return("rivers_gr2m")
   }
+  if (key %in% c("catchments_arnovic", "cat_pisco_arnovic", "cat_pisco_arnovic_v1.1", "cuencas_arnovic")) {
+    return("catchments_arnovic")
+  }
+  if (key %in% c("rivers_arnovic", "riv_pisco_arnovic", "riv_pisco_arnovic_v1.1", "rios_arnovic")) {
+    return("rivers_arnovic")
+  }
   
   # Exact match in file names or list keys
-  if (key %in% names(.pisco_files)) {
+  if (key %in% names(.pisco_current_files())) {
     return(key)
   }
   

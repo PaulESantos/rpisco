@@ -2,10 +2,11 @@ Package: rpisco
 Title: Access and Process PISCO High-Resolution Climate Grids for Peru
 Version: 0.1.0
 Authors@R: c(
-    person(given = c("Paul", "Efren"),
+    person(given = "Paul Efren", 
            family = "Santos Andrade",
-           email = "paulefren16@gmail.com",
-           role = c("aut", "cre")),
+           email = "paulefrens@gmail.com",
+           role = c("aut", "cre", "cph"),
+           comment = c(ORCID = "0000-0002-6635-0375")),
     person(given = "Leonardo",
            family = "Gutierrez",
            role = "dtc",
@@ -39,6 +40,7 @@ Imports:
     tibble,
     tools
 Suggests: 
+    geoperu,
     ggplot2,
     knitr,
     rmarkdown,

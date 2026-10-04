@@ -40,11 +40,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Paul Efren Santos Andrade \email{paulefren16@gmail.com}
+\strong{Maintainer}: Paul Efren Santos Andrade \email{paulefrens@gmail.com} (\href{https://orcid.org/0000-0002-6635-0375}{ORCID}) [copyright holder]
 
 Authors:
 \itemize{
-  \item Paul Efren Santos Andrade \email{paulefren16@gmail.com}
+  \item Paul Efren Santos Andrade \email{paulefrens@gmail.com} (\href{https://orcid.org/0000-0002-6635-0375}{ORCID}) [copyright holder]
 }
 
 Other contributors:

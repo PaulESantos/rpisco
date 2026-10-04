@@ -12,7 +12,8 @@ pisco_download(
   overwrite = FALSE,
   verify_md5 = TRUE,
   timeout = 3600,
-  quiet = FALSE
+  quiet = FALSE,
+  refresh = TRUE
 )
 }
 \arguments{
@@ -22,7 +23,9 @@ pisco_download(
 \item Temperature: \code{"tmax_daily"}, \code{"tmin_daily"}, \code{"tmax_clim"}, \code{"tmin_clim"}.
 \item Evapotranspiration: \code{"eto_clim"} (\code{"PISCOeo_pm"}).
 \item Erosivity: \code{"erosivity_r"}, \code{"erosivity_density"}.
-\item Streamflow: \code{"streamflow_monthly"}, \code{"streamflow_daily"}, \code{"catchments_gr2m"}, \code{"rivers_gr2m"}.
+\item Streamflow: \code{"streamflow_monthly"}, \code{"streamflow_daily"},
+\code{"catchments_gr2m"}, \code{"rivers_gr2m"}, \code{"catchments_arnovic"}, or
+\code{"rivers_arnovic"}.
 Default is \code{"monthly"}.
 }}
 
@@ -35,6 +38,10 @@ Default is \code{"monthly"}.
 \item{timeout}{Numeric. Maximum seconds to allow for download. Default is 3600 (1 hour).}
 
 \item{quiet}{Logical. If \code{TRUE}, suppresses progress messages. Default is \code{FALSE}.}
+
+\item{refresh}{Logical. If \code{TRUE}, refreshes public repository metadata before
+downloading an uncached file. This is safe because calling this function is
+an explicit user request to download data. Default is \code{TRUE}.}
 }
 \value{
 Character. The absolute path to the downloaded (or cached) file.

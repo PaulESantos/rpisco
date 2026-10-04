@@ -6,13 +6,17 @@
 \usage{
 pisco_catalog(
   variable = c("all", "precipitation", "temperature", "evapotranspiration", "erosivity",
-    "streamflow")
+    "streamflow"),
+  refresh = FALSE
 )
 }
 \arguments{
 \item{variable}{Character. Variable filter: \code{"all"}, \code{"precipitation"},
 \code{"temperature"}, \code{"evapotranspiration"}, \code{"erosivity"}, or \code{"streamflow"}.
 Default is \code{"all"}.}
+
+\item{refresh}{Logical. If \code{TRUE}, explicitly refreshes the in-session
+metadata from the Figshare and HydroShare APIs. This never downloads data.}
 }
 \value{
 A \link[tibble:tibble]{tibble::tibble} containing metadata for the selected PISCO datasets.

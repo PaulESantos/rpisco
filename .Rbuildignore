@@ -11,5 +11,9 @@
 ^docs$
 ^pkgdown$
 ^walkthrough\.md$
+^scratch$
+^\.quarto$
 ^doc$
 ^Meta$
+^tests/testthat/Rplots\.pdf$
+^Rplots\.pdf$

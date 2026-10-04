@@ -1,11 +1,54 @@
-.Rproj.user
+# History files
 .Rhistory
+*.Rhistory
+var/
+
+# Example code in package build process
+*-Ex.R
+
+# RStudio files
+.Rproj.user/
+
+# Produced by roxygen2 and R CMD check / build
+.Rcheck/
+*.Rcheck/
+*.tar.gz
+
+# R environment & data
 .RData
+.RDataTmp
+.Ruserdata
+.Renviron
+
+# OAuth / Tokens / Credentials
 .httr-oauth
+
+# Plot / Graphics artifacts
+Rplots.pdf
+tests/testthat/Rplots.pdf
+
+# macOS / Windows OS files
 .DS_Store
-.quarto
-docs
-raw-docs
-walkthrough\.md
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Quarto / pkgdown / build outputs
+.quarto/
+docs/
+raw-docs/
+pkgdown/
 /doc/
 /Meta/
+inst/doc/
+
+# Documentation / local scratch notes
+walkthrough.md
+scratch/
+
+# IDE / Editors
+.vscode/
+.idea/
+*.swp
+*~

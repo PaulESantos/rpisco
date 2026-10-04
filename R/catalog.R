@@ -8,6 +8,8 @@
 #' @param variable Character. Variable filter: `"all"`, `"precipitation"`,
 #'   `"temperature"`, `"evapotranspiration"`, `"erosivity"`, or `"streamflow"`.
 #'   Default is `"all"`.
+#' @param refresh Logical. If `TRUE`, explicitly refreshes the in-session
+#'   metadata from the Figshare and HydroShare APIs. This never downloads data.
 #'
 #' @return A [tibble::tibble] containing metadata for the selected PISCO datasets.
 #' @export
@@ -20,18 +22,21 @@
 #' pisco_catalog("temperature")
 #' pisco_catalog("streamflow")
 pisco_catalog <- function(variable = c("all", "precipitation", "temperature", 
-                                      "evapotranspiration", "erosivity", "streamflow")) {
+                                      "evapotranspiration", "erosivity", "streamflow"),
+                          refresh = FALSE) {
   variable <- match.arg(variable)
+  if (isTRUE(refresh)) pisco_refresh_catalog(quiet = TRUE)
   cache <- pisco_cache_dir()
   
-  keys <- names(.pisco_files)
+  files <- .pisco_current_files()
+  keys <- names(files)
   
   if (variable != "all") {
-    keys <- keys[vapply(keys, function(k) .pisco_files[[k]]$variable == variable, logical(1))]
+    keys <- keys[vapply(keys, function(k) files[[k]]$variable == variable, logical(1))]
   }
   
   rows <- lapply(keys, function(key) {
-    item <- .pisco_files[[key]]
+    item <- files[[key]]
     fpath <- file.path(cache, item$filename)
     cached <- file.exists(fpath)
     

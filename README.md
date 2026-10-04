@@ -121,10 +121,13 @@ desarrollados por SENAMHI DHI-SEH y colaboradores:
 - **Catálogo unificado y filtrable:** Explora todos los productos por
   variable (`precipitation`, `temperature`, `evapotranspiration`,
   `erosivity`, `streamflow`) o por palabra clave con `pisco_catalog()`.
-- **Descarga inteligente y caché persistente:** Descarga desde Figshare
-  y HydroShare con reintentos automáticos, control de tiempo de espera
-  (`timeout`) y verificación MD5. Compatible con directivas CRAN
-  (`tools::R_user_dir`).
+- **Descarga explícita y caché persistente:** `pisco_download()` solicita
+  archivos desde Figshare y HydroShare con reintentos, control de tiempo de
+  espera (`timeout`) y verificación MD5. Los archivos se conservan en la caché
+  de usuario (`tools::R_user_dir`), por lo que no se descargan de nuevo.
+- **Metadatos actualizables bajo demanda:** `pisco_refresh_catalog()` consulta
+  las API públicas de Figshare y HydroShare para actualizar URLs, tamaños y
+  sumas de verificación, sin descargar datos.
 - **Resolución flexible de alias:** Accede a los datasets con nombres
   nemotécnicos (ej. `"tmax_clim"`, `"tmin_monthly"`, `"eto_clim"`,
   `"erosivity_r"`, `"pisco_gr2m"`, `"cat_pisco_gr2m"`).
@@ -293,14 +296,17 @@ pisco_citation(variable = "streamflow", format = "bibtex")
 
 ### 2. Precipitación PISCOp v3.0
 
-La función `pisco_read()` descarga el archivo si no está en la caché
-local y lo carga como un objeto `terra::SpatRaster`:
+Primero se solicita la descarga explícitamente. El archivo queda en la caché
+local y `pisco_read()` lo reutiliza sin conexiones de red:
 
 ``` r
 library(terra)
 #> terra 1.9.46
 
-# Cargar precipitación mensual (1981-2025, 540 capas)
+# Descargar precipitación mensual (una sola vez, salvo `overwrite = TRUE`)
+pisco_download("monthly")
+
+# Cargar precipitación mensual desde la caché (1981-2025, 540 capas)
 pr_m <- pisco_read("monthly")
 
 # Cargar normal climatológica 1991-2015 (12 capas)

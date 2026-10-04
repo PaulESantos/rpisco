@@ -10,13 +10,18 @@
 #'   - Temperature: `"tmax_daily"`, `"tmin_daily"`, `"tmax_clim"`, `"tmin_clim"`.
 #'   - Evapotranspiration: `"eto_clim"` (`"PISCOeo_pm"`).
 #'   - Erosivity: `"erosivity_r"`, `"erosivity_density"`.
-#'   - Streamflow: `"streamflow_monthly"`, `"streamflow_daily"`, `"catchments_gr2m"`, `"rivers_gr2m"`.
+#'   - Streamflow: `"streamflow_monthly"`, `"streamflow_daily"`,
+#'     `"catchments_gr2m"`, `"rivers_gr2m"`, `"catchments_arnovic"`, or
+#'     `"rivers_arnovic"`.
 #'   Default is `"monthly"`.
 #' @param destdir Character. Destination directory. Default is [pisco_cache_dir()].
 #' @param overwrite Logical. If `TRUE`, re-downloads the file even if present in cache.
 #' @param verify_md5 Logical. If `TRUE` and an MD5 hash is registered, validates the checksum. Default is `TRUE`.
 #' @param timeout Numeric. Maximum seconds to allow for download. Default is 3600 (1 hour).
 #' @param quiet Logical. If `TRUE`, suppresses progress messages. Default is `FALSE`.
+#' @param refresh Logical. If `TRUE`, refreshes public repository metadata before
+#'   downloading an uncached file. This is safe because calling this function is
+#'   an explicit user request to download data. Default is `TRUE`.
 #'
 #' @return Character. The absolute path to the downloaded (or cached) file.
 #' @export
@@ -40,9 +45,10 @@ pisco_download <- function(dataset = c("monthly", "daily", "climatology",
                            overwrite = FALSE,
                            verify_md5 = TRUE,
                            timeout = 3600,
-                           quiet = FALSE) {
+                           quiet = FALSE,
+                           refresh = TRUE) {
   dataset <- .pisco_resolve_dataset(dataset)
-  info <- .pisco_files[[dataset]]
+  info <- .pisco_current_files()[[dataset]]
   
   if (!dir.exists(destdir)) {
     dir.create(destdir, recursive = TRUE, showWarnings = FALSE)
@@ -55,6 +61,11 @@ pisco_download <- function(dataset = c("monthly", "daily", "climatology",
       cli::cli_alert_info("Found cached file: {.file {target_file}} ({round(file.size(target_file)/(1024^2), 2)} MB). Skipping download.")
     }
     return(normalizePath(target_file, winslash = "/"))
+  }
+
+  if (isTRUE(refresh)) {
+    pisco_refresh_catalog(timeout = min(timeout, 60), quiet = quiet)
+    info <- .pisco_current_files()[[dataset]]
   }
   
   if (!quiet) {

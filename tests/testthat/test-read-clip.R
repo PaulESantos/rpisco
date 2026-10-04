@@ -69,8 +69,38 @@ test_that(".pisco_filter_dates filters years, dates, and year-months correctly",
 })
 
 test_that("S3 plot methods for SpatRaster and SpatVector work without errors", {
+  pdf(NULL)
+  on.exit(dev.off(), add = TRUE)
   r <- terra::rast(matrix(1:4, 2, 2))
   # Should not error with 'invalid type passed to graphics function'
   expect_no_error(plot(r))
   expect_no_error(plot(r[[1]], main = "Test Layer"))
 })
+
+test_that("pisco_clip works with sf polygon and respects crop_only", {
+  r <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                   resolution = 0.1, crs = "EPSG:4326")
+  terra::values(r) <- seq_len(terra::ncell(r))
+  
+  pt <- sf::st_point(c(-75, -10))
+  poly_sf <- sf::st_sf(data.frame(id = 1), geometry = sf::st_sfc(sf::st_buffer(pt, 1), crs = 4326))
+  
+  # Crop and mask
+  clipped <- pisco_clip(r, mask = poly_sf)
+  expect_s4_class(clipped, "SpatRaster")
+  expect_true(any(is.na(terra::values(clipped))))
+  
+  # Crop only
+  cropped_only <- pisco_clip(r, mask = poly_sf, crop_only = TRUE)
+  expect_s4_class(cropped_only, "SpatRaster")
+  expect_false(any(is.na(terra::values(cropped_only))))
+  
+  # Reprojection on the fly from UTM
+  poly_utm <- sf::st_transform(poly_sf, 32718)
+  clipped_utm <- pisco_clip(r, mask = poly_utm)
+  expect_s4_class(clipped_utm, "SpatRaster")
+  expect_equal(as.vector(terra::ext(clipped)), as.vector(terra::ext(clipped_utm)))
+})
+
+
+

@@ -3,17 +3,20 @@
 #' @description
 #' Reads a PISCO dataset into memory or memory-mapped objects ([terra::SpatRaster]
 #' for raster grids, or `sf` for catchment/river vector layers). If the file is
-#' not present locally, it can be downloaded automatically if `download = TRUE`.
+#' not present locally, it can be downloaded after the caller explicitly sets
+#' `download = TRUE`.
 #'
 #' @param dataset Character. The dataset to load:
 #'   - Precipitation: `"monthly"` (`"PISCOp_m"`), `"daily"` (`"PISCOp_d"`), `"climatology"` (`"PISCOp_clim2"`).
 #'   - Temperature: `"tmax_daily"`, `"tmin_daily"`, `"tmax_clim"`, `"tmin_clim"`.
 #'   - Evapotranspiration: `"eto_clim"` (`"PISCOeo_pm"`).
 #'   - Erosivity: `"erosivity_r"`, `"erosivity_density"`.
-#'   - Streamflow: `"streamflow_monthly"`, `"streamflow_daily"`, `"catchments_gr2m"`, `"rivers_gr2m"`.
+#'   - Streamflow: `"streamflow_monthly"`, `"streamflow_daily"`,
+#'     `"catchments_gr2m"`, `"rivers_gr2m"`, `"catchments_arnovic"`, or
+#'     `"rivers_arnovic"`.
 #'   Default is `"monthly"`.
 #' @param file Character. Optional custom path to a PISCO NetCDF or GeoPackage file.
-#'   If `NULL`, looks in the local cache or downloads automatically.
+#'   If `NULL`, looks in the local cache.
 #' @param dates Vector of dates, years, year-months, or indices to filter layers.
 #'   - For daily/monthly rasters: Date objects, character dates (`"1998-01-01"`),
 #'     character year-months (`c("1997-01", "1998-12")`), or numeric years (`1998` or `c(1997, 1998)`).
@@ -21,8 +24,8 @@
 #' @param aoi Optional spatial object (`sf`, `SpatVector`, or bounding box vector)
 #'   to crop/mask the raster upon reading. Alias for `mask`.
 #' @param mask Optional spatial mask. Same as `aoi`.
-#' @param download Logical. If `TRUE` and file is not cached, downloads it automatically.
-#'   Default is `TRUE`.
+#' @param download Logical. If `TRUE` and file is not cached, downloads it after
+#'   this explicit request. Default is `FALSE` to avoid implicit network access.
 #'
 #' @return A [terra::SpatRaster] object (for gridded data) or an `sf` object (for vector hydrography).
 #' @export
@@ -49,14 +52,14 @@ pisco_read <- function(dataset = c("monthly", "daily", "climatology",
                        dates = NULL,
                        aoi = NULL,
                        mask = NULL,
-                       download = TRUE) {
+                       download = FALSE) {
   # Consolidate aoi and mask
   if (is.null(mask) && !is.null(aoi)) {
     mask <- aoi
   }
   
   resolved_ds <- if (!is.null(dataset)) .pisco_resolve_dataset(dataset) else "monthly"
-  info <- .pisco_files[[resolved_ds]]
+  info <- .pisco_current_files()[[resolved_ds]]
   
   if (is.null(file)) {
     cached_path <- file.path(pisco_cache_dir(), info$filename)
@@ -66,7 +69,11 @@ pisco_read <- function(dataset = c("monthly", "daily", "climatology",
         cli::cli_alert_info("Dataset '{resolved_ds}' not found in cache. Starting download...")
         cached_path <- pisco_download(resolved_ds)
       } else {
-        cli::cli_abort("File not found in cache: {.file {cached_path}}. Set `download = TRUE` to fetch it.")
+        cli::cli_abort(c(
+          "x" = "File not found in the local cache: {.file {cached_path}}.",
+          "i" = "Download it explicitly with {.code pisco_download('{resolved_ds}')}.",
+          "i" = "Or call {.code pisco_read('{resolved_ds}', download = TRUE)} to authorize this download."
+        ))
       }
     }
     file <- cached_path

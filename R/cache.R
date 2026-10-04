@@ -31,8 +31,9 @@ pisco_cache_dir <- function(path = NULL) {
 pisco_cache_status <- function() {
   cache <- pisco_cache_dir()
   
-  results <- lapply(names(.pisco_files), function(key) {
-    info <- .pisco_files[[key]]
+  files <- .pisco_current_files()
+  results <- lapply(names(files), function(key) {
+    info <- files[[key]]
     fpath <- file.path(cache, info$filename)
     exists <- file.exists(fpath)
     
@@ -70,11 +71,12 @@ pisco_cache_clear <- function(dataset = "all") {
     return(invisible(TRUE))
   }
   
-  matched <- match.arg(dataset, choices = names(.pisco_files))
-  fpath <- file.path(cache, .pisco_files[[matched]]$filename)
+  files <- .pisco_current_files()
+  matched <- match.arg(dataset, choices = names(files))
+  fpath <- file.path(cache, files[[matched]]$filename)
   if (file.exists(fpath)) {
     unlink(fpath)
-    cli::cli_alert_success("Removed {matched} ({.pisco_files[[matched]]$filename}) from cache.")
+    cli::cli_alert_success("Removed {matched} ({files[[matched]]$filename}) from cache.")
   } else {
     cli::cli_alert_info("Dataset '{matched}' is not present in cache.")
   }
