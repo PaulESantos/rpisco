@@ -10,7 +10,12 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 8,
+  fig.height = 4.8,
+  fig.align = "center",
+  out.width = "100%",
+  dpi = 150
 )
 ```
 
@@ -26,6 +31,7 @@ Este artículo muestra cómo obtener los límites oficiales de la **provincia de
 # pak::pak("PaulESantos/rpisco")
 
 library(geoperu)
+library(ggplot2)
 library(rpisco)
 library(sf)
 library(terra)
@@ -110,10 +116,51 @@ Para aislar y visualizar la cuadrícula espacial de precipitación sobre el ámb
 ```{r}
 # Recortar y enmascarar la grilla raster al límite de la provincia
 pisco_anta <- pisco_clip(pisco_mensual, mask = anta_provincia)
+```
 
-# Visualizar la precipitación del primer mes (enero de 2020)
-plot(pisco_anta[[1]], main = "Precipitación en la Provincia de Anta (Ene 2020) - mm/mes")
-plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.5)
+Podemos visualizar la distribución espacial de la precipitación utilizando los métodos gráficos base de `terra`, ajustando los márgenes y relación de aspecto para la geometría de la provincia:
+
+```{r, fig.width = 8, fig.height = 4.5, fig.align = "center", out.width = "100%"}
+# Visualizar la precipitación del primer mes (enero de 2020) con terra
+plot(
+  pisco_anta[[1]],
+  main = "Precipitación en la Provincia de Anta (Enero 2020)",
+  plg = list(title = "mm/mes"),
+  mar = c(3.2, 3.2, 2.5, 5),
+  cex.main = 0.95
+)
+plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.2)
+```
+
+O generar una visualización cartográfica con `ggplot2` y `geom_sf()`:
+
+```{r, fig.width = 8, fig.height = 4.5, fig.align = "center", out.width = "100%"}
+# Convertir la capa raster a data frame para ggplot2
+df_anta <- as.data.frame(pisco_anta[[1]], xy = TRUE)
+colnames(df_anta) <- c("lon", "lat", "precip")
+
+ggplot() +
+  geom_raster(data = df_anta, aes(x = lon, y = lat, fill = precip)) +
+  geom_sf(data = anta_provincia, fill = NA, color = "black", linewidth = 0.5) +
+  scale_fill_viridis_c(
+    name = "Precipitación\n(mm/mes)",
+    option = "viridis",
+    na.value = "transparent"
+  ) +
+  coord_sf() +
+  labs(
+    title = "Precipitación en la Provincia de Anta (Enero 2020)",
+    subtitle = "PISCOp v3.0 mensual (0.1°) - SENAMHI",
+    x = "Longitud",
+    y = "Latitud"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(color = "gray30", size = 10),
+    panel.grid = element_line(color = "gray90", linetype = "dotted"),
+    legend.position = "right"
+  )
 ```
 
 ## 5. Exportar Resultados
