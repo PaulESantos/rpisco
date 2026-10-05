@@ -83,6 +83,8 @@ pisco_clip <- function(x, mask, crop_only = FALSE, touches = TRUE, ...) {
   .check_overlap(ext_m)
   
   # Single-pass crop and mask directly in C++ via terra::crop(mask = TRUE)
-  terra::crop(x, mask, mask = !crop_only, touches = touches, ...)
+  res <- terra::crop(x, mask, mask = !crop_only, touches = touches, ...)
+  terra::setMinMax(res)
 }
+
 

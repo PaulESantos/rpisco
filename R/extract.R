@@ -105,28 +105,35 @@ pisco_extract <- function(x,
   if (!is.null(polygons)) {
     if (inherits(polygons, "sf") || inherits(polygons, "sfc")) {
       v_poly <- terra::vect(polygons)
-      ids <- if (!is.null(id_col) && id_col %in% names(polygons)) {
-        polygons[[id_col]]
-      } else {
-        seq_len(nrow(polygons))
-      }
     } else if (inherits(polygons, "SpatVector")) {
       v_poly <- polygons
-      ids <- if (!is.null(id_col) && id_col %in% names(polygons)) {
-        polygons[[id_col]]
-      } else {
-        seq_len(nrow(polygons))
-      }
     } else {
       cli::cli_abort("Argument `polygons` must be an `sf` or `terra::SpatVector` object.")
     }
     
+    # If id_col has duplicates (e.g. multiple districts under the same province),
+    # aggregate geometries by id_col so zonal statistics represent the consolidated entity
+    if (!is.null(id_col) && id_col %in% names(v_poly)) {
+      if (anyDuplicated(v_poly[[id_col]][[1]])) {
+        v_poly <- terra::aggregate(v_poly, by = id_col)
+      }
+      ids <- as.character(v_poly[[id_col]][[1]])
+    } else {
+      ids <- if (!is.null(id_col) && id_col %in% names(v_poly)) {
+        as.character(v_poly[[id_col]][[1]])
+      } else {
+        seq_len(nrow(v_poly))
+      }
+    }
+
+    
     # Ensure matching CRS
-    if (!is.na(terra::crs(v_poly)) && terra::crs(v_poly) != "" && terra::crs(v_poly) != terra::crs(x)) {
+    if (terra::crs(v_poly) != "" && !terra::same.crs(v_poly, x)) {
       v_poly <- terra::project(v_poly, terra::crs(x))
     }
     
     vals <- terra::extract(x, v_poly, fun = fun, na.rm = TRUE, ID = FALSE)
+
     
     res_list <- lapply(seq_len(nrow(vals)), function(i) {
       v <- as.numeric(vals[i, ])

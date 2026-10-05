@@ -36,3 +36,30 @@ test_that("pisco_extract handles rasters without dates (climatology)", {
   expect_true("layer" %in% colnames(res))
   expect_equal(res$precipitation, rep(25, 12))
 })
+
+test_that("pisco_extract handles polygon zonal statistics and duplicate id aggregation", {
+  r <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                   resolution = 0.5, crs = "EPSG:4326", nlyrs = 6)
+  terra::values(r) <- rep(1:6, each = terra::ncell(r))
+  dts <- seq(as.Date("2020-01-01"), by = "month", length.out = 6)
+  terra::time(r) <- dts
+  
+  p1 <- sf::st_buffer(sf::st_point(c(-76, -11)), 0.8)
+  p2 <- sf::st_buffer(sf::st_point(c(-74, -9)), 0.8)
+  poly_sf <- sf::st_sf(
+    distrito = c("Distrito_A", "Distrito_B"),
+    provincia = c("Provincia_X", "Provincia_X"),
+    geometry = sf::st_sfc(p1, p2, crs = 4326)
+  )
+  
+  # 1. Distinct id_col: extracts each polygon separately (2 polygons * 6 months = 12 rows)
+  res_dist <- pisco_extract(r, polygons = poly_sf, id_col = "distrito")
+  expect_equal(nrow(res_dist), 12)
+  expect_equal(unique(res_dist$id), c("Distrito_A", "Distrito_B"))
+  
+  # 2. Duplicate id_col: automatically aggregates into 1 consolidated polygon (1 province * 6 months = 6 rows)
+  res_prov <- pisco_extract(r, polygons = poly_sf, id_col = "provincia")
+  expect_equal(nrow(res_prov), 6)
+  expect_equal(unique(res_prov$id), "Provincia_X")
+})
+

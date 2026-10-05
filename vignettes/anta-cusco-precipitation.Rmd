@@ -20,7 +20,7 @@ Este artículo muestra cómo obtener los límites oficiales de la **provincia de
 
 ## Paquetes Requeridos
 
-```{r, eval = FALSE}
+```{r}
 # Instalar los paquetes si no están instalados
 # install.packages("geoperu")
 # pak::pak("PaulESantos/rpisco")
@@ -35,7 +35,7 @@ library(terra)
 
 A través de `geoperu`, se descarga la cartografía oficial del INEI para la provincia de **Anta**:
 
-```{r, eval = FALSE}
+```{r}
 # Descargar límites de la provincia de Anta (incluye sus 9 distritos)
 anta_provincia <- geoperu::get_geo_peru(
   geography = "ANTA",
@@ -50,7 +50,7 @@ print(anta_provincia[, c("departamento", "provincia", "distrito")])
 
 Si se desea obtener un único polígono envolvente de toda la provincia consolidada:
 
-```{r, eval = FALSE}
+```{r}
 # Unir los distritos en un único polígono provincial
 anta_limite_total <- sf::st_union(anta_provincia)
 ```
@@ -59,7 +59,7 @@ anta_limite_total <- sf::st_union(anta_provincia)
 
 `rpisco` requiere autorización explícita para la descarga de datos mediante `pisco_download()`. El archivo NetCDF (~56 MB) se almacena en la caché de usuario (`tools::R_user_dir`), evitando descargas redundantes en sesiones futuras:
 
-```{r, eval = FALSE}
+```{r}
 # Descargar PISCOp v3.0 mensual (1981-2025)
 pisco_download("monthly")
 
@@ -71,7 +71,7 @@ pisco_cache_status()
 
 Se cargan las capas correspondientes al periodo 2020–2024 y se calculan las medias zonales mensuales para cada distrito de la provincia de Anta utilizando `pisco_extract()`:
 
-```{r, eval = FALSE}
+```{r}
 # Leer solo los años 2020 a 2024 desde la caché local
 pisco_mensual <- pisco_read(
   dataset = "monthly",
@@ -91,7 +91,7 @@ head(precipitacion_distrital)
 
 Para obtener una única serie promedio consolidada para toda la provincia:
 
-```{r, eval = FALSE}
+```{r}
 # Extraer el promedio espacial para toda la provincia consolidada
 precipitacion_provincial <- pisco_extract(
   x = pisco_mensual,
@@ -107,7 +107,7 @@ head(precipitacion_provincial)
 
 Para aislar y visualizar la cuadrícula espacial de precipitación sobre el ámbito territorial de la provincia de Anta, se utiliza la función optimizada `pisco_clip()`:
 
-```{r, eval = FALSE}
+```{r}
 # Recortar y enmascarar la grilla raster al límite de la provincia
 pisco_anta <- pisco_clip(pisco_mensual, mask = anta_provincia)
 
