@@ -82,9 +82,16 @@ pisco_clip <- function(x, mask, crop_only = FALSE, touches = TRUE, ...) {
   ext_m <- terra::ext(mask)
   .check_overlap(ext_m)
   
-  # Single-pass crop and mask directly in C++ via terra::crop(mask = TRUE)
-  res <- terra::crop(x, mask, mask = !crop_only, touches = touches, ...)
+  # Crop to mask spatial bounding box first
+  x_cropped <- terra::crop(x, mask, ...)
+  if (isTRUE(crop_only)) {
+    return(terra::setMinMax(x_cropped))
+  }
+  
+  # Apply polygon mask to the cropped extent and compute real min/max
+  res <- terra::mask(x_cropped, mask, touches = touches)
   terra::setMinMax(res)
 }
+
 
 
