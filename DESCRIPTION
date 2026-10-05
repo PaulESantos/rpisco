@@ -33,6 +33,8 @@ Depends:
     R (>= 4.1.0)
 Imports: 
     cli,
+    ggplot2,
+    grDevices,
     httr2,
     sf,
     stats,
@@ -41,10 +43,10 @@ Imports:
     tools
 Suggests: 
     geoperu,
-    ggplot2,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
+LazyData: true
 VignetteBuilder: 
     knitr
 Config/testthat/edition: 3
