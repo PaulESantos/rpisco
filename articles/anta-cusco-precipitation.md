@@ -22,6 +22,7 @@ utilizando `geoperu` y `rpisco`.
 
 library(geoperu)
 #> This is geoperu 0.0.1
+library(ggplot2)
 library(rpisco)
 library(sf)
 #> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
@@ -190,13 +191,61 @@ optimizada
 
 # Recortar y enmascarar la grilla raster al límite de la provincia
 pisco_anta <- pisco_clip(pisco_mensual, mask = anta_provincia)
-
-# Visualizar la precipitación del primer mes (enero de 2020)
-plot(pisco_anta[[1]], main = "Precipitación en la Provincia de Anta (Ene 2020) - mm/mes")
-plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.5)
 ```
 
-![](anta-cusco-precipitation_files/figure-html/unnamed-chunk-8-1.png)
+Podemos visualizar la distribución espacial de la precipitación
+utilizando los métodos gráficos base de `terra`, ajustando los márgenes
+y relación de aspecto para la geometría de la provincia:
+
+``` r
+
+# Visualizar la precipitación del primer mes (enero de 2020) con terra
+plot(
+  pisco_anta[[1]],
+  main = "Precipitación en la Provincia de Anta (Enero 2020)",
+  plg = list(title = "mm/mes"),
+  mar = c(3.2, 3.2, 2.5, 5),
+  cex.main = 0.95
+)
+plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.2)
+```
+
+![](anta-cusco-precipitation_files/figure-html/unnamed-chunk-9-1.png)
+
+O generar una visualización cartográfica con `ggplot2` y
+[`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html):
+
+``` r
+
+# Convertir la capa raster a data frame para ggplot2
+df_anta <- as.data.frame(pisco_anta[[1]], xy = TRUE)
+colnames(df_anta) <- c("lon", "lat", "precip")
+
+ggplot() +
+  geom_raster(data = df_anta, aes(x = lon, y = lat, fill = precip)) +
+  geom_sf(data = anta_provincia, fill = NA, color = "black", linewidth = 0.5) +
+  scale_fill_viridis_c(
+    name = "Precipitación\n(mm/mes)",
+    option = "viridis",
+    na.value = "transparent"
+  ) +
+  coord_sf() +
+  labs(
+    title = "Precipitación en la Provincia de Anta (Enero 2020)",
+    subtitle = "PISCOp v3.0 mensual (0.1°) - SENAMHI",
+    x = "Longitud",
+    y = "Latitud"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    plot.title = element_text(face = "bold", size = 12),
+    plot.subtitle = element_text(color = "gray30", size = 10),
+    panel.grid = element_line(color = "gray90", linetype = "dotted"),
+    legend.position = "right"
+  )
+```
+
+![](anta-cusco-precipitation_files/figure-html/unnamed-chunk-10-1.png)
 
 ## 5. Exportar Resultados
 
