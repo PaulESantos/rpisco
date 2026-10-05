@@ -10,6 +10,7 @@ cache status across the full PISCO family (SENAMHI DHI-SEH).
 pisco_catalog(
   variable = c("all", "precipitation", "temperature", "evapotranspiration", "erosivity",
     "streamflow"),
+  dataset = NULL,
   refresh = FALSE
 )
 ```
@@ -21,6 +22,12 @@ pisco_catalog(
   Character. Variable filter: `"all"`, `"precipitation"`,
   `"temperature"`, `"evapotranspiration"`, `"erosivity"`, or
   `"streamflow"`. Default is `"all"`.
+
+- dataset:
+
+  Character. Optional dataset filter (e.g., `"monthly"`, `"daily"`,
+  `"tmax_daily"`, `"tmax_clim"`, `"streamflow_monthly"`). Supports all
+  dataset aliases and file names. Default is `NULL`.
 
 - refresh:
 
@@ -89,6 +96,22 @@ pisco_catalog("streamflow")
 #> 4 rivers_gr2m  streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
 #> 5 catchments_… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…
 #> 6 rivers_arno… streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…
+#> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
+#> #   download_url <chr>
+
+# Filter by specific dataset
+pisco_catalog(dataset = "tmax_daily")
+#> # A tibble: 1 × 13
+#>   dataset    variable   product filename timestep period layers resolution unit 
+#>   <chr>      <chr>      <chr>   <chr>    <chr>    <chr>   <int> <chr>      <chr>
+#> 1 tmax_daily temperatu… PISCOt… tmax_da… daily    1981-…  14610 0.10 deg … degC 
+#> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
+#> #   download_url <chr>
+pisco_catalog(dataset = "climatology")
+#> # A tibble: 1 × 13
+#>   dataset     variable  product filename timestep period layers resolution unit 
+#>   <chr>       <chr>     <chr>   <chr>    <chr>    <chr>   <int> <chr>      <chr>
+#> 1 climatology precipit… PISCOp… PISCOp_… climato… 1991-…     12 0.10 deg … mm/m…
 #> # ℹ 4 more variables: size_mb <dbl>, source <chr>, cached <lgl>,
 #> #   download_url <chr>
 ```

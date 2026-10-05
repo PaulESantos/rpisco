@@ -56,6 +56,7 @@ across the full PISCO family (SENAMHI DHI-SEH).</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pisco_catalog</span><span class="op">(</span></span>
 <span>  variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"precipitation"</span>, <span class="st">"temperature"</span>, <span class="st">"evapotranspiration"</span>, <span class="st">"erosivity"</span>,</span>
 <span>    <span class="st">"streamflow"</span><span class="op">)</span>,</span>
+<span>  dataset <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  refresh <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -68,6 +69,12 @@ across the full PISCO family (SENAMHI DHI-SEH).</p>
 <dd><p>Character. Variable filter: <code>"all"</code>, <code>"precipitation"</code>,
 <code>"temperature"</code>, <code>"evapotranspiration"</code>, <code>"erosivity"</code>, or <code>"streamflow"</code>.
 Default is <code>"all"</code>.</p></dd>
+
+
+<dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
+<dd><p>Character. Optional dataset filter (e.g., <code>"monthly"</code>,
+<code>"daily"</code>, <code>"tmax_daily"</code>, <code>"tmax_clim"</code>, <code>"streamflow_monthly"</code>). Supports
+all dataset aliases and file names. Default is <code>NULL</code>.</p></dd>
 
 
 <dt id="arg-refresh">refresh<a class="anchor" aria-label="anchor" href="#arg-refresh"></a></dt>
@@ -136,6 +143,22 @@ metadata from the Figshare and HydroShare APIs. This never downloads data.</p></
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> rivers_gr2m  streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> catchments_… streamf… cat_pi… cat_pis… static   1981-…      1 vector po… boun…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> rivers_arno… streamf… riv_pi… riv_pis… static   1981-…      1 vector li… stre…</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: size_mb &lt;dbl&gt;, source &lt;chr&gt;, cached &lt;lgl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   download_url &lt;chr&gt;</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Filter by specific dataset</span></span></span>
+<span class="r-in"><span><span class="fu">pisco_catalog</span><span class="op">(</span>dataset <span class="op">=</span> <span class="st">"tmax_daily"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   dataset    variable   product filename timestep period layers resolution unit </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> tmax_daily temperatu… PISCOt… tmax_da… daily    1981-…  <span style="text-decoration: underline;">14</span>610 0.10 deg … degC </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: size_mb &lt;dbl&gt;, source &lt;chr&gt;, cached &lt;lgl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   download_url &lt;chr&gt;</span></span>
+<span class="r-in"><span><span class="fu">pisco_catalog</span><span class="op">(</span>dataset <span class="op">=</span> <span class="st">"climatology"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 1 × 13</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   dataset     variable  product filename timestep period layers resolution unit </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> climatology precipit… PISCOp… PISCOp_… climato… 1991-…     12 0.10 deg … mm/m…</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 4 more variables: size_mb &lt;dbl&gt;, source &lt;chr&gt;, cached &lt;lgl&gt;,</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   download_url &lt;chr&gt;</span></span>
 </code></pre></div>
