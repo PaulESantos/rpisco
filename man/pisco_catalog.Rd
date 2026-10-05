@@ -7,6 +7,7 @@
 pisco_catalog(
   variable = c("all", "precipitation", "temperature", "evapotranspiration", "erosivity",
     "streamflow"),
+  dataset = NULL,
   refresh = FALSE
 )
 }
@@ -14,6 +15,10 @@ pisco_catalog(
 \item{variable}{Character. Variable filter: \code{"all"}, \code{"precipitation"},
 \code{"temperature"}, \code{"evapotranspiration"}, \code{"erosivity"}, or \code{"streamflow"}.
 Default is \code{"all"}.}
+
+\item{dataset}{Character. Optional dataset filter (e.g., \code{"monthly"},
+\code{"daily"}, \code{"tmax_daily"}, \code{"tmax_clim"}, \code{"streamflow_monthly"}). Supports
+all dataset aliases and file names. Default is \code{NULL}.}
 
 \item{refresh}{Logical. If \code{TRUE}, explicitly refreshes the in-session
 metadata from the Figshare and HydroShare APIs. This never downloads data.}
@@ -34,4 +39,8 @@ pisco_catalog()
 pisco_catalog("precipitation")
 pisco_catalog("temperature")
 pisco_catalog("streamflow")
+
+# Filter by specific dataset
+pisco_catalog(dataset = "tmax_daily")
+pisco_catalog(dataset = "climatology")
 }

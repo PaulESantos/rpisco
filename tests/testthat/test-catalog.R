@@ -113,3 +113,24 @@ test_that("pisco_citation produces text and bibtex formats across variables", {
   bib_var <- pisco_cite(variable = "temperature", format = "bibtex")
   expect_match(bib_var, "@article\\{huerta2023piscot")
 })
+
+test_that("pisco_catalog supports dataset argument and direct dataset alias", {
+  # Named argument dataset = "tmax_daily"
+  cat_tx <- pisco_catalog(dataset = "tmax_daily")
+  expect_s3_class(cat_tx, "tbl_df")
+  expect_equal(nrow(cat_tx), 1)
+  expect_equal(cat_tx$dataset, "tmax_daily")
+  expect_equal(cat_tx$product, "PISCOt_tx_d")
+
+  # Direct unnamed argument passing dataset alias
+  cat_clim <- pisco_catalog("climatology")
+  expect_equal(nrow(cat_clim), 1)
+  expect_equal(cat_clim$dataset, "climatology")
+  expect_equal(cat_clim$product, "PISCOp_clim2")
+
+  # Alias resolution inside dataset argument
+  cat_alias <- pisco_catalog(dataset = "tmax")
+  expect_equal(nrow(cat_alias), 1)
+  expect_equal(cat_alias$dataset, "tmax_daily")
+})
+

@@ -8,6 +8,9 @@
 #' @param variable Character. Variable filter: `"all"`, `"precipitation"`,
 #'   `"temperature"`, `"evapotranspiration"`, `"erosivity"`, or `"streamflow"`.
 #'   Default is `"all"`.
+#' @param dataset Character. Optional dataset filter (e.g., `"monthly"`,
+#'   `"daily"`, `"tmax_daily"`, `"tmax_clim"`, `"streamflow_monthly"`). Supports
+#'   all dataset aliases and file names. Default is `NULL`.
 #' @param refresh Logical. If `TRUE`, explicitly refreshes the in-session
 #'   metadata from the Figshare and HydroShare APIs. This never downloads data.
 #'
@@ -21,15 +24,39 @@
 #' pisco_catalog("precipitation")
 #' pisco_catalog("temperature")
 #' pisco_catalog("streamflow")
+#'
+#' # Filter by specific dataset
+#' pisco_catalog(dataset = "tmax_daily")
+#' pisco_catalog(dataset = "climatology")
 pisco_catalog <- function(variable = c("all", "precipitation", "temperature", 
                                       "evapotranspiration", "erosivity", "streamflow"),
+                          dataset = NULL,
                           refresh = FALSE) {
-  variable <- match.arg(variable)
+  valid_vars <- c("all", "precipitation", "temperature", 
+                  "evapotranspiration", "erosivity", "streamflow")
+  
+  # Allow passing dataset directly as first unnamed argument (e.g. pisco_catalog("tmax_daily"))
+  if (is.character(variable) && length(variable) == 1 && is.null(dataset)) {
+    if (!variable %in% valid_vars) {
+      ds_resolved <- tryCatch(.pisco_resolve_dataset(variable), error = function(e) NULL)
+      if (!is.null(ds_resolved)) {
+        dataset <- ds_resolved
+        variable <- "all"
+      }
+    }
+  }
+  
+  variable <- match.arg(variable, valid_vars)
   if (isTRUE(refresh)) pisco_refresh_catalog(quiet = TRUE)
   cache <- pisco_cache_dir()
   
   files <- .pisco_current_files()
   keys <- names(files)
+  
+  if (!is.null(dataset)) {
+    target_ds <- .pisco_resolve_dataset(dataset)
+    keys <- keys[keys == target_ds]
+  }
   
   if (variable != "all") {
     keys <- keys[vapply(keys, function(k) files[[k]]$variable == variable, logical(1))]
@@ -56,6 +83,24 @@ pisco_catalog <- function(variable = c("all", "precipitation", "temperature",
       download_url = item$download_url
     )
   })
+  
+  if (length(rows) == 0) {
+    return(tibble::tibble(
+      dataset = character(),
+      variable = character(),
+      product = character(),
+      filename = character(),
+      timestep = character(),
+      period = character(),
+      layers = integer(),
+      resolution = character(),
+      unit = character(),
+      size_mb = numeric(),
+      source = character(),
+      cached = logical(),
+      download_url = character()
+    ))
+  }
   
   do.call(rbind, rows)
 }
