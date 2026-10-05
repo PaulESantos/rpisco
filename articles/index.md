@@ -10,5 +10,5 @@
   PISCO_HyM](https://PaulESantos.github.io/rpisco/articles/hydrological-applications.md):
 - [4. Validación de Grillas contra Observaciones
   In-Situ](https://PaulESantos.github.io/rpisco/articles/validation-metrics.md):
-- [Precipitación PISCO para el distrito de Anta,
+- [Precipitación PISCO para la provincia de Anta,
   Cusco](https://PaulESantos.github.io/rpisco/articles/anta-cusco-precipitation.md):

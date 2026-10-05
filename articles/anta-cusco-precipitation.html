@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Precipitación PISCO para el distrito de Anta, Cusco • rpisco</title>
+<title>Precipitación PISCO para la provincia de Anta, Cusco • rpisco</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Precipitación PISCO para el distrito de Anta, Cusco">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Precipitación PISCO para la provincia de Anta, Cusco">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -39,7 +39,7 @@
     <li><a class="dropdown-item" href="../articles/climate-analytics.html">2. Análisis Climático: Recortes, Agregaciones Temporales y Anomalías</a></li>
     <li><a class="dropdown-item" href="../articles/hydrological-applications.html">3. Aplicaciones Hidrológicas y Cuencas con PISCO_HyM</a></li>
     <li><a class="dropdown-item" href="../articles/validation-metrics.html">4. Validación de Grillas contra Observaciones In-Situ</a></li>
-    <li><a class="dropdown-item" href="../articles/anta-cusco-precipitation.html">Precipitación PISCO para el distrito de Anta, Cusco</a></li>
+    <li><a class="dropdown-item" href="../articles/anta-cusco-precipitation.html">Precipitación PISCO para la provincia de Anta, Cusco</a></li>
   </ul>
 </li>
       </ul>
@@ -58,7 +58,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>Precipitación PISCO para el distrito de Anta, Cusco</h1>
+      <h1>Precipitación PISCO para la provincia de Anta, Cusco</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/PaulESantos/rpisco/blob/master/vignettes/anta-cusco-precipitation.Rmd" class="external-link"><code>vignettes/anta-cusco-precipitation.Rmd</code></a></small>
@@ -67,96 +67,192 @@
 
     
     
-<p>Este ejemplo obtiene el límite oficial del distrito de
-<strong>Anta</strong>, provincia de <strong>Anta</strong>, departamento
-de <strong>Cusco</strong>, y calcula la precipitación mensual media
-espacial de PISCOp para 2020–2024. <code>geoperu</code> entrega límites
-administrativos del INEI como objetos <code>sf</code>, que se pueden
-usar directamente con <code>rpisco</code>.</p>
-<p>No se ejecuta código en esta viñeta: la descarga de PISCO es una
-acción explícita del usuario y el archivo mensual ocupa aproximadamente
-54 MB.</p>
+<p>Este artículo muestra cómo obtener los límites oficiales de la
+<strong>provincia de Anta</strong> (departamento de
+<strong>Cusco</strong>), conformada por sus 9 distritos (Anta,
+Ancahuasi, Cachimayo, Chinchaypujio, Huarocondo, Limatambo, Mollepata,
+Pucyura y Zurite), y cómo procesar la precipitación mensual grillada de
+PISCOp v3.0 para el periodo 2020–2024 utilizando <code>geoperu</code> y
+<code>rpisco</code>.</p>
+<blockquote>
+<p><strong>Nota:</strong> Los bloques de código que descargan o procesan
+archivos NetCDF de gran tamaño están configurados con
+<code>eval = FALSE</code> para permitir la compilación rápida y fuera de
+línea de la viñeta conforme a las directivas de CRAN.</p>
+</blockquote>
 <div class="section level2">
-<h2 id="paquetes">Paquetes<a class="anchor" aria-label="anchor" href="#paquetes"></a>
+<h2 id="paquetes-requeridos">Paquetes Requeridos<a class="anchor" aria-label="anchor" href="#paquetes-requeridos"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Instalar una sola vez, si fuera necesario</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"geoperu"</span><span class="op">)</span></span>
-<span><span class="co"># pak::pak("PaulESantos/rpisco")  # versión de desarrollo de rpisco</span></span>
+<code class="sourceCode R"><span><span class="co"># Instalar los paquetes si no están instalados</span></span>
+<span><span class="co"># install.packages("geoperu")</span></span>
+<span><span class="co"># pak::pak("PaulESantos/rpisco")</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PaulESantos/geoperu" class="external-link">geoperu</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PaulESantos/rpisco" class="external-link">rpisco</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; This is geoperu 0.0.1</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/PaulESantos/rpisco" class="external-link">rpisco</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/" class="external-link">sf</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; terra 1.9.50</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="obtener-y-verificar-el-distrito">1. Obtener y verificar el distrito<a class="anchor" aria-label="anchor" href="#obtener-y-verificar-el-distrito"></a>
+<h2 id="obtención-de-los-límites-de-la-provincia-de-anta">1. Obtención de los Límites de la Provincia de Anta<a class="anchor" aria-label="anchor" href="#obtenci%C3%B3n-de-los-l%C3%ADmites-de-la-provincia-de-anta"></a>
 </h2>
-<p>Se consulta Cusco sin simplificar para obtener los polígonos
-distritales; luego se filtra con ambos nombres administrativos. Usar los
-dos campos evita confundir un distrito homónimo de otra provincia.</p>
+<p>A través de <code>geoperu</code>, se descarga la cartografía oficial
+del INEI para la provincia de <strong>Anta</strong>:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">cusco_distritos</span> <span class="op">&lt;-</span> <span class="fu">geoperu</span><span class="fu">::</span><span class="fu"><a href="https://paulesantos.github.io/geoperu/reference/get_geo_peru.html" class="external-link">get_geo_peru</a></span><span class="op">(</span></span>
-<span>  geography <span class="op">=</span> <span class="st">"CUSCO"</span>,</span>
-<span>  level <span class="op">=</span> <span class="st">"dep"</span>,</span>
+<code class="sourceCode R"><span><span class="co"># Descargar límites de la provincia de Anta (incluye sus 9 distritos)</span></span>
+<span><span class="va">anta_provincia</span> <span class="op">&lt;-</span> <span class="fu">geoperu</span><span class="fu">::</span><span class="fu"><a href="https://paulesantos.github.io/geoperu/reference/get_geo_peru.html" class="external-link">get_geo_peru</a></span><span class="op">(</span></span>
+<span>  geography <span class="op">=</span> <span class="st">"ANTA"</span>,</span>
+<span>  level <span class="op">=</span> <span class="st">"prov"</span>,</span>
 <span>  simplified <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  showProgress <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">anta</span> <span class="op">&lt;-</span> <span class="va">cusco_distritos</span><span class="op">[</span></span>
-<span>  <span class="va">cusco_distritos</span><span class="op">$</span><span class="va">provincia</span> <span class="op">==</span> <span class="st">"ANTA"</span> <span class="op">&amp;</span></span>
-<span>    <span class="va">cusco_distritos</span><span class="op">$</span><span class="va">distrito</span> <span class="op">==</span> <span class="st">"ANTA"</span>,</span>
-<span><span class="op">]</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/stopifnot.html" class="external-link">stopifnot</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">anta</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1L</span><span class="op">)</span></span>
-<span><span class="va">anta</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"departamento"</span>, <span class="st">"provincia"</span>, <span class="st">"distrito"</span><span class="op">)</span><span class="op">]</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="descargar-piscop-mensual-una-vez">2. Descargar PISCOp mensual una vez<a class="anchor" aria-label="anchor" href="#descargar-piscop-mensual-una-vez"></a>
-</h2>
-<p>Esta llamada es el consentimiento explícito para descargar.
-<code>rpisco</code> conserva el NetCDF en su caché de usuario; en
-ejecuciones posteriores <code><a href="../reference/pisco_read.html">pisco_read()</a></code> usa ese archivo local
-y no inicia ninguna descarga.</p>
+<span><span class="co"># Verificar distritos contenidos</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">anta_provincia</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"departamento"</span>, <span class="st">"provincia"</span>, <span class="st">"distrito"</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Simple feature collection with 9 features and 3 fields</span></span>
+<span><span class="co">#&gt; Geometry type: MULTIPOLYGON</span></span>
+<span><span class="co">#&gt; Dimension:     XY</span></span>
+<span><span class="co">#&gt; Bounding box:  xmin: -72.77286 ymin: -13.71406 xmax: -72.00001 ymax: -13.28477</span></span>
+<span><span class="co">#&gt; Geodetic CRS:  WGS 84</span></span>
+<span><span class="co">#&gt;   departamento provincia      distrito                           geom</span></span>
+<span><span class="co">#&gt; 1        CUSCO      ANTA CHINCHAYPUJIO MULTIPOLYGON (((-72.25802 -...</span></span>
+<span><span class="co">#&gt; 2        CUSCO      ANTA          ANTA MULTIPOLYGON (((-72.11767 -...</span></span>
+<span><span class="co">#&gt; 3        CUSCO      ANTA       PUCYURA MULTIPOLYGON (((-72.06076 -...</span></span>
+<span><span class="co">#&gt; 4        CUSCO      ANTA     CACHIMAYO MULTIPOLYGON (((-72.00248 -...</span></span>
+<span><span class="co">#&gt; 5        CUSCO      ANTA     MOLLEPATA MULTIPOLYGON (((-72.54716 -...</span></span>
+<span><span class="co">#&gt; 6        CUSCO      ANTA     LIMATAMBO MULTIPOLYGON (((-72.54668 -...</span></span>
+<span><span class="co">#&gt; 7        CUSCO      ANTA    HUAROCONDO MULTIPOLYGON (((-72.23262 -...</span></span>
+<span><span class="co">#&gt; 8        CUSCO      ANTA        ZURITE MULTIPOLYGON (((-72.20297 -...</span></span>
+<span><span class="co">#&gt; 9        CUSCO      ANTA     ANCAHUASI MULTIPOLYGON (((-72.27944 -...</span></span></code></pre></div>
+<p>Si se desea obtener un único polígono envolvente de toda la provincia
+consolidada:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/pisco_download.html">pisco_download</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/pisco_cache_dir.html">pisco_cache_status</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Unir los distritos en un único polígono provincial</span></span>
+<span><span class="va">anta_limite_total</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_combine.html" class="external-link">st_union</a></span><span class="op">(</span><span class="va">anta_provincia</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="recuperar-la-precipitación-del-área">3. Recuperar la precipitación del área<a class="anchor" aria-label="anchor" href="#recuperar-la-precipitaci%C3%B3n-del-%C3%A1rea"></a>
+<h2 id="descarga-explícita-del-producto-piscop-mensual">2. Descarga Explícita del Producto PISCOp Mensual<a class="anchor" aria-label="anchor" href="#descarga-expl%C3%ADcita-del-producto-piscop-mensual"></a>
 </h2>
-<p><code><a href="../reference/pisco_read.html">pisco_read()</a></code> carga únicamente los meses solicitados.
-<code><a href="../reference/pisco_extract.html">pisco_extract()</a></code> calcula la media de las celdas que
-intersectan el polígono y retorna una tabla ordenada. La unidad de
-<code>precipitation</code> es <strong>mm/mes</strong>.</p>
+<p><code>rpisco</code> requiere autorización explícita para la descarga
+de datos mediante <code><a href="../reference/pisco_download.html">pisco_download()</a></code>. El archivo NetCDF (~56
+MB) se almacena en la caché de usuario (<code><a href="https://rdrr.io/r/tools/userdir.html" class="external-link">tools::R_user_dir</a></code>),
+evitando descargas redundantes en sesiones futuras:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pisco_mensual</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_read.html">pisco_read</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># Descargar PISCOp v3.0 mensual (1981-2025)</span></span>
+<span><span class="fu"><a href="../reference/pisco_download.html">pisco_download</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Refreshed metadata for 9 PISCO file(s).</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">Downloading PISCO dataset: monthly (PISCOp_m)</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Variable: <span style="color: #0000BB;">"precipitation"</span> | File: <span style="color: #0000BB;">"PISCOp_m.nc"</span> | Size: ~53.98 MB</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Period: <span style="color: #0000BB;">"1981-01 to 2025-12"</span> | Resolution: <span style="color: #0000BB;">"0.10 deg (~10 km)"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Source: Figshare repository</span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> MD5 checksum verified successfully: <span style="color: #0000BB;">"fbf4f19b5d537183a75d08615c404010"</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00BB00;">✔</span> Dataset saved successfully to: <span style="color: #0000BB;">/home/runner/.cache/R/rpisco/PISCOp_m.nc</span></span></span>
+<span><span class="co">#&gt; [1] "/home/runner/.cache/R/rpisco/PISCOp_m.nc"</span></span>
+<span></span>
+<span><span class="co"># Verificar el estado de la caché local</span></span>
+<span><span class="fu"><a href="../reference/pisco_cache_dir.html">pisco_cache_status</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 16 × 6</span></span></span>
+<span><span class="co">#&gt;    dataset            filename                cached expected_mb cached_mb path </span></span>
+<span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>              <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                   <span style="color: #949494; font-style: italic;">&lt;lgl&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> monthly            PISCOp_m.nc             TRUE         54.0       54.0 /hom…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> daily              PISCOp_d.nc             FALSE      <span style="text-decoration: underline;">1</span>456.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> climatology        PISCOp_clim2.nc         FALSE         1.74       0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> tmax_daily         tmax_daily_1981_2020_0… FALSE       603.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> tmin_daily         tmin_daily_1981_2020_0… FALSE       620.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> tmax_clim          tmax_mean_1981-2010_01… FALSE         0.52       0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> tmin_clim          tmin_mean_1981-2010_01… FALSE         0.53       0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> eto_clim           eo_mean_1981-2010.nc    FALSE        64.0        0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> erosivity_r        PISCOa_re.nc            FALSE         1.75       0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> erosivity_density  PISCOa_ed.nc            FALSE         1.75       0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">11</span> streamflow_monthly PISCO_GR2M_v2.0.nc      FALSE        24.6        0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">12</span> streamflow_daily   PISCO_ARNOVIC_v1.1.nc   FALSE       747.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">13</span> catchments_gr2m    cat_pisco_gr2m_v2.0.gp… FALSE       100.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">14</span> rivers_gr2m        riv_pisco_gr2m_v2.0.gp… FALSE        15.2        0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">15</span> catchments_arnovic cat_pisco_arnovic_v1.1… FALSE       100.         0   <span style="color: #BB0000;">NA</span>   </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">16</span> rivers_arnovic     riv_pisco_arnovic_v1.1… FALSE        15.2        0   <span style="color: #BB0000;">NA</span></span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="extracción-de-series-temporales-de-precipitación">3. Extracción de Series Temporales de Precipitación<a class="anchor" aria-label="anchor" href="#extracci%C3%B3n-de-series-temporales-de-precipitaci%C3%B3n"></a>
+</h2>
+<p>Se cargan las capas correspondientes al periodo 2020–2024 y se
+calculan las medias zonales mensuales para cada distrito de la provincia
+de Anta utilizando <code><a href="../reference/pisco_extract.html">pisco_extract()</a></code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Leer solo los años 2020 a 2024 desde la caché local</span></span>
+<span><span class="va">pisco_mensual</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_read.html">pisco_read</a></span><span class="op">(</span></span>
 <span>  dataset <span class="op">=</span> <span class="st">"monthly"</span>,</span>
 <span>  dates <span class="op">=</span> <span class="fl">2020</span><span class="op">:</span><span class="fl">2024</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">precipitacion_anta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_extract.html">pisco_extract</a></span><span class="op">(</span></span>
+<span><span class="co"># Extraer el promedio espacial mensual (mm/mes) por distrito</span></span>
+<span><span class="va">precipitacion_distrital</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_extract.html">pisco_extract</a></span><span class="op">(</span></span>
 <span>  x <span class="op">=</span> <span class="va">pisco_mensual</span>,</span>
-<span>  polygons <span class="op">=</span> <span class="va">anta</span>,</span>
+<span>  polygons <span class="op">=</span> <span class="va">anta_provincia</span>,</span>
 <span>  id_col <span class="op">=</span> <span class="st">"distrito"</span>,</span>
 <span>  fun <span class="op">=</span> <span class="va">mean</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">precipitacion_anta</span><span class="op">)</span></span></code></pre></div>
-<p>Para trabajar solamente con las celdas del distrito (por ejemplo,
-para crear un mapa), se puede recortar y enmascarar el raster:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pisco_anta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_clip.html">pisco_clip</a></span><span class="op">(</span><span class="va">pisco_mensual</span>, mask <span class="op">=</span> <span class="va">anta</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pisco_anta</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Precipitación en Anta: enero de 2020"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">anta</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">precipitacion_distrital</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
+<span><span class="co">#&gt;   id            date       precipitation</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> CHINCHAYPUJIO 2020-01-01        235.  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> CHINCHAYPUJIO 2020-02-01        217.  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> CHINCHAYPUJIO 2020-03-01        155.  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> CHINCHAYPUJIO 2020-04-01         22.6 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> CHINCHAYPUJIO 2020-05-01         16.3 </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> CHINCHAYPUJIO 2020-06-01          4.62</span></span></code></pre></div>
+<p>Para obtener una única serie promedio consolidada para toda la
+provincia:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Extraer el promedio espacial para toda la provincia consolidada</span></span>
+<span><span class="va">precipitacion_provincial</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_extract.html">pisco_extract</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="va">pisco_mensual</span>,</span>
+<span>  polygons <span class="op">=</span> <span class="va">anta_provincia</span>,</span>
+<span>  id_col <span class="op">=</span> <span class="st">"provincia"</span>,</span>
+<span>  fun <span class="op">=</span> <span class="va">mean</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">precipitacion_provincial</span><span class="op">)</span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 6 × 3</span></span></span>
+<span><span class="co">#&gt;   id    date       precipitation</span></span>
+<span><span class="co">#&gt;   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span> <span style="color: #949494; font-style: italic;">&lt;date&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">1</span> ANTA  2020-01-01         148. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">2</span> ANTA  2020-02-01         164. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">3</span> ANTA  2020-03-01         130. </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">4</span> ANTA  2020-04-01          28.1</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">5</span> ANTA  2020-05-01          16.3</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">6</span> ANTA  2020-06-01          11.2</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="guardar-la-serie-resultante">4. Guardar la serie resultante<a class="anchor" aria-label="anchor" href="#guardar-la-serie-resultante"></a>
+<h2 id="recorte-y-enmascaramiento-espacial-pisco_clip">4. Recorte y Enmascaramiento Espacial (<code>pisco_clip</code>)<a class="anchor" aria-label="anchor" href="#recorte-y-enmascaramiento-espacial-pisco_clip"></a>
 </h2>
-<p>La exportación también es deliberada. El CSV contiene una fila por
-mes y la precipitación media areal del distrito.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Para aislar y visualizar la cuadrícula espacial de precipitación
+sobre el ámbito territorial de la provincia de Anta, se utiliza la
+función optimizada <code><a href="../reference/pisco_clip.html">pisco_clip()</a></code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Recortar y enmascarar la grilla raster al límite de la provincia</span></span>
+<span><span class="va">pisco_anta</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/pisco_clip.html">pisco_clip</a></span><span class="op">(</span><span class="va">pisco_mensual</span>, mask <span class="op">=</span> <span class="va">anta_provincia</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualizar la precipitación del primer mes (enero de 2020)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pisco_anta</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, main <span class="op">=</span> <span class="st">"Precipitación en la Provincia de Anta (Ene 2020) - mm/mes"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html" class="external-link">st_geometry</a></span><span class="op">(</span><span class="va">anta_provincia</span><span class="op">)</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, border <span class="op">=</span> <span class="st">"black"</span>, lwd <span class="op">=</span> <span class="fl">1.5</span><span class="op">)</span></span></code></pre></div>
+<p><img src="anta-cusco-precipitation_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" alt="" width="700"></p>
+</div>
+<div class="section level2">
+<h2 id="exportar-resultados">5. Exportar Resultados<a class="anchor" aria-label="anchor" href="#exportar-resultados"></a>
+</h2>
+<p>Las series temporales extraídas pueden guardarse como un archivo CSV
+para análisis hidrológicos o climáticos posteriores:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span></span>
-<span>  <span class="va">precipitacion_anta</span>,</span>
-<span>  file <span class="op">=</span> <span class="st">"precipitacion_mensual_anta_cusco_2020_2024.csv"</span>,</span>
+<span>  <span class="va">precipitacion_distrital</span>,</span>
+<span>  file <span class="op">=</span> <span class="st">"precipitacion_mensual_provincia_anta_distritos_2020_2024.csv"</span>,</span>
 <span>  row.names <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
