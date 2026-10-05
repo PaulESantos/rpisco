@@ -12,3 +12,5 @@
   In-Situ](https://PaulESantos.github.io/rpisco/articles/validation-metrics.md):
 - [Precipitación PISCO para la provincia de Anta,
   Cusco](https://PaulESantos.github.io/rpisco/articles/anta-cusco-precipitation.md):
+- [Climatodiagramas de Walter-Lieth por Punto y por Área con
+  rpisco](https://PaulESantos.github.io/rpisco/articles/climatodiagrama-walter-lieth.md):

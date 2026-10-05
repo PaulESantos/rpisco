@@ -2,6 +2,10 @@
 
 ## All functions
 
+- [`clima_ejemplo`](https://PaulESantos.github.io/rpisco/reference/clima_ejemplo.md)
+  : Datos climatológicos de prueba para climatodiagramas
+- [`climatodiagrama()`](https://PaulESantos.github.io/rpisco/reference/climatodiagrama.md)
+  : Climatodiagrama de Walter-Lieth
 - [`pisco_aggregate()`](https://PaulESantos.github.io/rpisco/reference/pisco_aggregate.md)
   : Temporal Aggregation of PISCO Rasters
 - [`pisco_anomaly()`](https://PaulESantos.github.io/rpisco/reference/pisco_anomaly.md)
