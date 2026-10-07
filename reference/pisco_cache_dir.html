@@ -67,7 +67,8 @@ rpisco to store downloaded NetCDF files."></head><body>
 
 <dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Character. Dataset name (<code>"monthly"</code>, <code>"daily"</code>, <code>"climatology"</code>),
-or <code>"all"</code> to remove all cached files.</p></dd>
+or <code>"all"</code> to remove every cached file known to <code>rpisco</code>. Files unrelated
+to <code>rpisco</code> are never removed.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -95,8 +96,8 @@ or <code>"all"</code> to remove all cached files.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">10</span> erosivity_density  PISCOa_ed.nc            FALSE         1.75         0 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">11</span> streamflow_monthly PISCO_GR2M_v2.0.nc      FALSE        24.6          0 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">12</span> streamflow_daily   PISCO_ARNOVIC_v1.1.nc   FALSE       747.           0 <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> catchments_gr2m    cat_pisco_gr2m_v2.0.gp… FALSE       100.           0 <span style="color: #BB0000;">NA</span>   </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rivers_gr2m        riv_pisco_gr2m_v2.0.gp… FALSE        15.2          0 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">13</span> catchments_gr2m    cat_pisco_GR2M_v2.0.gp… FALSE       100.           0 <span style="color: #BB0000;">NA</span>   </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">14</span> rivers_gr2m        riv_pisco_GR2M_v2.0.gp… FALSE        15.2          0 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">15</span> catchments_arnovic cat_pisco_arnovic_v1.1… FALSE       100.           0 <span style="color: #BB0000;">NA</span>   </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">16</span> rivers_arnovic     riv_pisco_arnovic_v1.1… FALSE        15.2          0 <span style="color: #BB0000;">NA</span>   </span>
 </code></pre></div>

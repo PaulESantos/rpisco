@@ -7,18 +7,16 @@ and hydrological Observations (PISCO).
 
 ## Details
 
-Supports the complete family of PISCO datasets developed by SENAMHI
-DHI-SEH:
+Supports the PISCO datasets included in the package catalog:
 
 - **Precipitation (PISCOp)**: PISCOp v3.0 (1981-2025; daily, monthly,
-  and climatological normal) and PISCOp_h (1981-2023 coarse gridded
-  rainfall).
+  and climatological normal).
 
-- **Temperature (PISCOt)**: PISCOt v1.2 (1981-2016; maximum and minimum
-  daily, monthly, and climatological normal).
+- **Temperature (PISCOt)**: PISCOt v1.2 (maximum and minimum daily data
+  and climatological normals).
 
-- **Evapotranspiration (PISCOeo_pm)**: PISCOeo_pm (1981-2016; daily,
-  monthly, and climatological normal reference evapotranspiration).
+- **Evapotranspiration (PISCOeo_pm)**: PISCOeo_pm monthly climatological
+  reference evapotranspiration.
 
 - **Rainfall Erosivity (PISCO_reed)**: PISCO_reed v1.0 (1981-2016;
   R-factor climatology and annual erosivity series).

@@ -7,10 +7,10 @@ Limatambo, Mollepata, Pucyura y Zurite), y cómo procesar la
 precipitación mensual grillada de PISCOp v3.0 para el periodo 2020–2024
 utilizando `geoperu` y `rpisco`.
 
-> **Nota:** Los bloques de código que descargan o procesan archivos
-> NetCDF de gran tamaño están configurados con `eval = FALSE` para
-> permitir la compilación rápida y fuera de línea de la viñeta conforme
-> a las directivas de CRAN.
+> **Nota:** Esta viñeta es deliberadamente no ejecutable durante la
+> comprobación del paquete: consulta servicios externos y usa archivos
+> NetCDF grandes. El código se conserva para reproducirlo de forma
+> explícita en una sesión local.
 
 ## Paquetes Requeridos
 
@@ -21,13 +21,10 @@ utilizando `geoperu` y `rpisco`.
 # pak::pak("PaulESantos/rpisco")
 
 library(geoperu)
-#> This is geoperu 0.0.1
 library(ggplot2)
 library(rpisco)
 library(sf)
-#> Linking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE
 library(terra)
-#> terra 1.9.50
 ```
 
 ## 1. Obtención de los Límites de la Provincia de Anta
@@ -47,21 +44,6 @@ anta_provincia <- geoperu::get_geo_peru(
 
 # Verificar distritos contenidos
 print(anta_provincia[, c("departamento", "provincia", "distrito")])
-#> Simple feature collection with 9 features and 3 fields
-#> Geometry type: MULTIPOLYGON
-#> Dimension:     XY
-#> Bounding box:  xmin: -72.77286 ymin: -13.71406 xmax: -72.00001 ymax: -13.28477
-#> Geodetic CRS:  WGS 84
-#>   departamento provincia      distrito                           geom
-#> 1        CUSCO      ANTA CHINCHAYPUJIO MULTIPOLYGON (((-72.25802 -...
-#> 2        CUSCO      ANTA          ANTA MULTIPOLYGON (((-72.11767 -...
-#> 3        CUSCO      ANTA       PUCYURA MULTIPOLYGON (((-72.06076 -...
-#> 4        CUSCO      ANTA     CACHIMAYO MULTIPOLYGON (((-72.00248 -...
-#> 5        CUSCO      ANTA     MOLLEPATA MULTIPOLYGON (((-72.54716 -...
-#> 6        CUSCO      ANTA     LIMATAMBO MULTIPOLYGON (((-72.54668 -...
-#> 7        CUSCO      ANTA    HUAROCONDO MULTIPOLYGON (((-72.23262 -...
-#> 8        CUSCO      ANTA        ZURITE MULTIPOLYGON (((-72.20297 -...
-#> 9        CUSCO      ANTA     ANCAHUASI MULTIPOLYGON (((-72.27944 -...
 ```
 
 Si se desea obtener un único polígono envolvente de toda la provincia
@@ -86,38 +68,9 @@ descargas redundantes en sesiones futuras:
 
 # Descargar PISCOp v3.0 mensual (1981-2025)
 pisco_download("monthly")
-#> ✔ Refreshed metadata for 9 PISCO file(s).
-#> 
-#> ── Downloading PISCO dataset: monthly (PISCOp_m) ──
-#> 
-#> ℹ Variable: "precipitation" | File: "PISCOp_m.nc" | Size: ~53.98 MB
-#> ℹ Period: "1981-01 to 2025-12" | Resolution: "0.10 deg (~10 km)"
-#> ℹ Source: Figshare repository
-#> ✔ MD5 checksum verified successfully: "fbf4f19b5d537183a75d08615c404010"
-#> ✔ Dataset saved successfully to: /home/runner/.cache/R/rpisco/PISCOp_m.nc
-#> [1] "/home/runner/.cache/R/rpisco/PISCOp_m.nc"
 
 # Verificar el estado de la caché local
 pisco_cache_status()
-#> # A tibble: 16 × 6
-#>    dataset            filename                cached expected_mb cached_mb path 
-#>    <chr>              <chr>                   <lgl>        <dbl>     <dbl> <chr>
-#>  1 monthly            PISCOp_m.nc             TRUE         54.0       54.0 /hom…
-#>  2 daily              PISCOp_d.nc             FALSE      1456.         0   NA   
-#>  3 climatology        PISCOp_clim2.nc         FALSE         1.74       0   NA   
-#>  4 tmax_daily         tmax_daily_1981_2020_0… FALSE       603.         0   NA   
-#>  5 tmin_daily         tmin_daily_1981_2020_0… FALSE       620.         0   NA   
-#>  6 tmax_clim          tmax_mean_1981-2010_01… FALSE         0.52       0   NA   
-#>  7 tmin_clim          tmin_mean_1981-2010_01… FALSE         0.53       0   NA   
-#>  8 eto_clim           eo_mean_1981-2010.nc    FALSE        64.0        0   NA   
-#>  9 erosivity_r        PISCOa_re.nc            FALSE         1.75       0   NA   
-#> 10 erosivity_density  PISCOa_ed.nc            FALSE         1.75       0   NA   
-#> 11 streamflow_monthly PISCO_GR2M_v2.0.nc      FALSE        24.6        0   NA   
-#> 12 streamflow_daily   PISCO_ARNOVIC_v1.1.nc   FALSE       747.         0   NA   
-#> 13 catchments_gr2m    cat_pisco_gr2m_v2.0.gp… FALSE       100.         0   NA   
-#> 14 rivers_gr2m        riv_pisco_gr2m_v2.0.gp… FALSE        15.2        0   NA   
-#> 15 catchments_arnovic cat_pisco_arnovic_v1.1… FALSE       100.         0   NA   
-#> 16 rivers_arnovic     riv_pisco_arnovic_v1.1… FALSE        15.2        0   NA
 ```
 
 ## 3. Extracción de Series Temporales de Precipitación
@@ -144,15 +97,6 @@ precipitacion_distrital <- pisco_extract(
 )
 
 head(precipitacion_distrital)
-#> # A tibble: 6 × 3
-#>   id            date       precipitation
-#>   <chr>         <date>             <dbl>
-#> 1 CHINCHAYPUJIO 2020-01-01        235.  
-#> 2 CHINCHAYPUJIO 2020-02-01        217.  
-#> 3 CHINCHAYPUJIO 2020-03-01        155.  
-#> 4 CHINCHAYPUJIO 2020-04-01         22.6 
-#> 5 CHINCHAYPUJIO 2020-05-01         16.3 
-#> 6 CHINCHAYPUJIO 2020-06-01          4.62
 ```
 
 Para obtener una única serie promedio consolidada para toda la
@@ -169,15 +113,6 @@ precipitacion_provincial <- pisco_extract(
 )
 
 head(precipitacion_provincial)
-#> # A tibble: 6 × 3
-#>   id    date       precipitation
-#>   <chr> <date>             <dbl>
-#> 1 ANTA  2020-01-01         148. 
-#> 2 ANTA  2020-02-01         164. 
-#> 3 ANTA  2020-03-01         130. 
-#> 4 ANTA  2020-04-01          28.1
-#> 5 ANTA  2020-05-01          16.3
-#> 6 ANTA  2020-06-01          11.2
 ```
 
 ## 4. Recorte y Enmascaramiento Espacial (`pisco_clip`)
@@ -209,8 +144,6 @@ plot(
 )
 plot(sf::st_geometry(anta_provincia), add = TRUE, border = "black", lwd = 1.2)
 ```
-
-![](anta-cusco-precipitation_files/figure-html/unnamed-chunk-9-1.png)
 
 O generar una visualización cartográfica con `ggplot2` y
 [`geom_sf()`](https://ggplot2.tidyverse.org/reference/ggsf.html):
@@ -244,8 +177,6 @@ ggplot() +
     legend.position = "right"
   )
 ```
-
-![](anta-cusco-precipitation_files/figure-html/unnamed-chunk-10-1.png)
 
 ## 5. Exportar Resultados
 

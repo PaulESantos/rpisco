@@ -23,7 +23,8 @@ pisco_cache_clear(dataset = "all")
 - dataset:
 
   Character. Dataset name (`"monthly"`, `"daily"`, `"climatology"`), or
-  `"all"` to remove all cached files.
+  `"all"` to remove every cached file known to `rpisco`. Files unrelated
+  to `rpisco` are never removed.
 
 ## Value
 
@@ -50,8 +51,8 @@ pisco_cache_status()
 #> 10 erosivity_density  PISCOa_ed.nc            FALSE         1.75         0 NA   
 #> 11 streamflow_monthly PISCO_GR2M_v2.0.nc      FALSE        24.6          0 NA   
 #> 12 streamflow_daily   PISCO_ARNOVIC_v1.1.nc   FALSE       747.           0 NA   
-#> 13 catchments_gr2m    cat_pisco_gr2m_v2.0.gp… FALSE       100.           0 NA   
-#> 14 rivers_gr2m        riv_pisco_gr2m_v2.0.gp… FALSE        15.2          0 NA   
+#> 13 catchments_gr2m    cat_pisco_GR2M_v2.0.gp… FALSE       100.           0 NA   
+#> 14 rivers_gr2m        riv_pisco_GR2M_v2.0.gp… FALSE        15.2          0 NA   
 #> 15 catchments_arnovic cat_pisco_arnovic_v1.1… FALSE       100.           0 NA   
 #> 16 rivers_arnovic     riv_pisco_arnovic_v1.1… FALSE        15.2          0 NA   
 ```
