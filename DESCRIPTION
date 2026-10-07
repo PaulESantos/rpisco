@@ -19,11 +19,11 @@ Description: Provides programmatic access, local caching, spatial subsetting,
     temporal aggregation, anomaly computation, and validation metrics for the
     Peruvian Interpolated data of SENAMHI's Climatological and hydrological
     Observations (PISCO) developed by SENAMHI DHI-SEH. Supports the complete
-    family of PISCO products: precipitation (PISCOp v3.0, PISCOp_h),
-    temperature (PISCOt v1.2 daily, monthly, and climatology), reference
-    evapotranspiration (PISCOeo_pm), rainfall erosivity (PISCO_reed v1.0),
-    and monthly streamflow with basin and river networks (PISCO_HyM GR2M and
-    ARNOVIC) hosted on Figshare and HydroShare. Includes optimized workflows
+    PISCO products included in its catalog: PISCOp v3.0 precipitation,
+    PISCOt v1.2 daily temperature and climatologies, PISCOeo_pm reference
+    evapotranspiration climatology, PISCO_reed v1.0 rainfall erosivity, and
+    PISCO_HyM GR2M and ARNOVIC streamflow with basin and river networks,
+    hosted on Figshare and HydroShare. Includes optimized workflows
     for basin-scale extraction, seasonal aggregations, and spatial raster and
     vector processing based on 'terra' and 'sf'.
 License: MIT + file LICENSE
@@ -42,7 +42,6 @@ Imports:
     tibble,
     tools
 Suggests: 
-    geoperu,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)

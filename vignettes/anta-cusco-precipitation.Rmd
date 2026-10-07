@@ -9,6 +9,7 @@ vignette: >
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
+  eval = FALSE,
   collapse = TRUE,
   comment = "#>",
   fig.width = 8,
@@ -21,7 +22,7 @@ knitr::opts_chunk$set(
 
 Este artículo muestra cómo obtener los límites oficiales de la **provincia de Anta** (departamento de **Cusco**), conformada por sus 9 distritos (Anta, Ancahuasi, Cachimayo, Chinchaypujio, Huarocondo, Limatambo, Mollepata, Pucyura y Zurite), y cómo procesar la precipitación mensual grillada de PISCOp v3.0 para el periodo 2020–2024 utilizando `geoperu` y `rpisco`.
 
-> **Nota:** Los bloques de código que descargan o procesan archivos NetCDF de gran tamaño están configurados con `eval = FALSE` para permitir la compilación rápida y fuera de línea de la viñeta conforme a las directivas de CRAN.
+> **Nota:** Esta viñeta es deliberadamente no ejecutable durante la comprobación del paquete: consulta servicios externos y usa archivos NetCDF grandes. El código se conserva para reproducirlo de forma explícita en una sesión local.
 
 ## Paquetes Requeridos
 

@@ -16,7 +16,8 @@ pisco_cache_clear(dataset = "all")
 \item{path}{Character. Custom path to set as cache. If \code{NULL}, returns current cache.}
 
 \item{dataset}{Character. Dataset name (\code{"monthly"}, \code{"daily"}, \code{"climatology"}),
-or \code{"all"} to remove all cached files.}
+or \code{"all"} to remove every cached file known to \code{rpisco}. Files unrelated
+to \code{rpisco} are never removed.}
 }
 \value{
 A character path to the cache directory, or logical status invisibly.

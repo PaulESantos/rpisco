@@ -55,18 +55,24 @@ pisco_cache_status <- function() {
 
 #' @rdname pisco_cache_dir
 #' @param dataset Character. Dataset name (`"monthly"`, `"daily"`, `"climatology"`),
-#'   or `"all"` to remove all cached files.
+#'   or `"all"` to remove every cached file known to `rpisco`. Files unrelated
+#'   to `rpisco` are never removed.
 #' @export
 pisco_cache_clear <- function(dataset = "all") {
   cache <- pisco_cache_dir()
   
   if (dataset == "all") {
-    files <- list.files(cache, full.names = TRUE)
+    files <- vapply(
+      .pisco_current_files(),
+      function(info) file.path(cache, info$filename),
+      character(1)
+    )
+    files <- files[file.exists(files)]
     if (length(files) > 0) {
       unlink(files)
-      cli::cli_alert_success("Cleared {length(files)} file(s) from PISCO cache ({cache}).")
+      cli::cli_alert_success("Cleared {length(files)} cached PISCO file(s) from {cache}.")
     } else {
-      cli::cli_alert_info("PISCO cache is already empty.")
+      cli::cli_alert_info("No cached PISCO files found in {cache}.")
     }
     return(invisible(TRUE))
   }

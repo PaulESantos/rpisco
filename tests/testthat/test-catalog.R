@@ -134,3 +134,28 @@ test_that("pisco_catalog supports dataset argument and direct dataset alias", {
   expect_equal(cat_alias$dataset, "tmax_daily")
 })
 
+test_that("cache clearing removes only files managed by rpisco", {
+  old_cache <- getOption("rpisco.cache_dir")
+  cache <- tempfile("rpisco-cache-")
+  dir.create(cache)
+  on.exit({
+    options(rpisco.cache_dir = old_cache)
+    unlink(cache, recursive = TRUE)
+  }, add = TRUE)
+
+  pisco_cache_dir(cache)
+  managed_file <- file.path(cache, .pisco_current_files()[["monthly"]]$filename)
+  unrelated_file <- file.path(cache, "keep-me.txt")
+  writeLines("managed", managed_file)
+  writeLines("unrelated", unrelated_file)
+
+  pisco_cache_clear("all")
+
+  expect_false(file.exists(managed_file))
+  expect_true(file.exists(unrelated_file))
+})
+
+test_that("bundled download URLs use HTTPS", {
+  urls <- vapply(.pisco_files, `[[`, character(1), "download_url")
+  expect_true(all(startsWith(urls, "https://")))
+})

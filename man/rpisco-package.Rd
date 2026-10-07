@@ -12,14 +12,14 @@ for the Peruvian Interpolated data of SENAMHI's Climatological and
 hydrological Observations (PISCO).
 }
 \details{
-Supports the complete family of PISCO datasets developed by SENAMHI DHI-SEH:
+Supports the PISCO datasets included in the package catalog:
 \itemize{
 \item \strong{Precipitation (PISCOp)}: PISCOp v3.0 (1981-2025; daily, monthly, and
-climatological normal) and PISCOp_h (1981-2023 coarse gridded rainfall).
-\item \strong{Temperature (PISCOt)}: PISCOt v1.2 (1981-2016; maximum and minimum
-daily, monthly, and climatological normal).
-\item \strong{Evapotranspiration (PISCOeo_pm)}: PISCOeo_pm (1981-2016; daily,
-monthly, and climatological normal reference evapotranspiration).
+climatological normal).
+\item \strong{Temperature (PISCOt)}: PISCOt v1.2 (maximum and minimum daily data
+and climatological normals).
+\item \strong{Evapotranspiration (PISCOeo_pm)}: PISCOeo_pm monthly climatological
+reference evapotranspiration.
 \item \strong{Rainfall Erosivity (PISCO_reed)}: PISCO_reed v1.0 (1981-2016; R-factor
 climatology and annual erosivity series).
 \item \strong{Streamflow (PISCO_HyM)}: Monthly gridded and vector streamflow
