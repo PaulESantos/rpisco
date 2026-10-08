@@ -34,7 +34,6 @@ for links, dataset keys, and scientific citations.
 Useful links:
 \itemize{
   \item \url{https://github.com/PaulESantos/rpisco}
-  \item \url{https://PaulESantos.github.io/rpisco/}
   \item Report bugs at \url{https://github.com/PaulESantos/rpisco/issues}
 }
 

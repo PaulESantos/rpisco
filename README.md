@@ -85,8 +85,8 @@ desarrollados por SENAMHI DHI-SEH y colaboradores:
   (mm/mes).
 - `PISCOeo_pm_m.nc`: Serie mensual continua 1981–2016 (mm/mes).
 - `PISCOeo_pm_d.nc`: Serie diaria continua 1981–2016 (mm/día).
-- **Referencia:** Huertas et al. (2021),
-  [doi:10.6084/m9.figshare.19101683](https://doi.org/10.6084/m9.figshare.19101683).
+- **Referencia:** Huerta et al. (2022), *Scientific Data*,
+  [doi:10.1038/s41597-022-01373-8](https://doi.org/10.1038/s41597-022-01373-8).
 
 ### 4. Erosividad de Lluvia: PISCO_reed v1.0 (1981–2016)
 
@@ -111,8 +111,9 @@ desarrollados por SENAMHI DHI-SEH y colaboradores:
   - `PISCO_HyM_GR2M_rivers`: Red de drenaje y tramos de ríos
     principales.
   - `PISCO_HyM_ARNOVIC_catchments` y `PISCO_HyM_ARNOVIC_rivers`.
-- **Referencia:** Huamán et al. (2022), HydroShare,
-  [doi:10.4211/hs.231267b1cbab401aa89146ec7b2518e3](https://doi.org/10.4211/hs.231267b1cbab401aa89146ec7b2518e3).
+- **Referencia:** Llauca et al. (2021), *Water*,
+  [doi:10.3390/w13081048](https://doi.org/10.3390/w13081048); HydroShare
+  ([f1b537f3...](https://www.hydroshare.org/resource/f1b537f338f24533af5dab946b51d215/)).
 
 ------------------------------------------------------------------------
 
@@ -562,10 +563,8 @@ productos empleados:
 
 ### Evapotranspiración de Referencia (PISCOeo_pm)
 
-- **Huertas, A. et al. (2021).** *PISCOeo_pm: Reference
-  Evapotranspiration Gridded Dataset for Peru based on FAO-56
-  Penman-Monteith*. SENAMHI DHI-SEH. Figshare:
-  [doi:10.6084/m9.figshare.19101683](https://doi.org/10.6084/m9.figshare.19101683).
+- **Huerta, A., Bonnesoeur, V., Cuadros-Adriazola, J., Gutierrez, L., & Lavado-Casimiro, W. (2022).** PISCOeo_pm, a reference evapotranspiration gridded database based on FAO Penman-Monteith in Peru. *Scientific Data*, 9, 328.
+  [doi:10.1038/s41597-022-01373-8](https://doi.org/10.1038/s41597-022-01373-8).
 
 ### Erosividad de Lluvia (PISCO_reed v1.0)
 
@@ -576,7 +575,6 @@ productos empleados:
 
 ### Caudales y Modelamiento Hidrológico (PISCO_HyM)
 
-- **Huamán, L., Lavado-Casimiro, W., et al. (2022).** *PISCO_HyM:
-  Monthly Streamflow Gridded Dataset and Hydrological Basins for Peru*.
-  HydroShare:
-  [doi:10.4211/hs.231267b1cbab401aa89146ec7b2518e3](https://doi.org/10.4211/hs.231267b1cbab401aa89146ec7b2518e3).
+- **Llauca, H., Lavado-Casimiro, W., Montesinos, C., Santini, W., & Rau, P. (2021).** PISCO_HyM_GR2M: A model of monthly water balance in Peru (1981–2020). *Water*, 13(8), 1048.
+  [doi:10.3390/w13081048](https://doi.org/10.3390/w13081048). HydroShare:
+  [https://www.hydroshare.org/resource/f1b537f338f24533af5dab946b51d215/](https://www.hydroshare.org/resource/f1b537f338f24533af5dab946b51d215/).
