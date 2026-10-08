@@ -38,8 +38,6 @@ Useful links:
 
 - <https://github.com/PaulESantos/rpisco>
 
-- <https://PaulESantos.github.io/rpisco/>
-
 - Report bugs at <https://github.com/PaulESantos/rpisco/issues>
 
 ## Author
