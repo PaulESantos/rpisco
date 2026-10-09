@@ -1,6 +1,16 @@
 url: https://PaulESantos.github.io/rpisco/
 template:
   bootstrap: 5
+  bslib:
+    primary: "#1b4965"
+    secondary: "#2d7a78"
+    success: "#3ba55d"
+    info: "#1f6f8b"
+    warning: "#f59e0b"
+    danger: "#b93939"
+    base_font: { google: "Montserrat" }
+    heading_font: { google: "Montserrat" }
+    code_font: { google: "Fira Code" }
 
 navbar:
   structure:
@@ -17,4 +27,3 @@ articles:
       - validation-metrics
       - anta-cusco-precipitation
       - climatodiagrama-walter-lieth
-
