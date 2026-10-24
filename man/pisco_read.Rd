@@ -56,7 +56,7 @@ not present locally, it can be downloaded after the caller explicitly sets
 \code{download = TRUE}.
 }
 \examples{
-\dontrun{
+\donttest{
 # Read monthly precipitation
 r_pr <- pisco_read("monthly")
 

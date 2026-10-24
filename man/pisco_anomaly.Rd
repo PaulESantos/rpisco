@@ -33,7 +33,7 @@ or a multi-year monthly mean). Anomalies can be expressed in absolute difference
 or percentage deviation (\\\%).
 }
 \examples{
-\dontrun{
+\donttest{
 r_m <- pisco_read("monthly", dates = c(1997, 1998))
 r_clim <- pisco_read("climatology")
 

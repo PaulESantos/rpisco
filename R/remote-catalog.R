@@ -12,7 +12,7 @@
 #' @return A [tibble::tibble] with refreshed metadata, invisibly.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' pisco_refresh_catalog()
 #' }
 pisco_refresh_catalog <- function(timeout = 30, quiet = FALSE) {

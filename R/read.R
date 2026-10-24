@@ -30,7 +30,7 @@
 #' @return A [terra::SpatRaster] object (for gridded data) or an `sf` object (for vector hydrography).
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Read monthly precipitation
 #' r_pr <- pisco_read("monthly")
 #'

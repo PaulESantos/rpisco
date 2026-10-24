@@ -26,7 +26,7 @@
 #' @return Character. The absolute path to the downloaded (or cached) file.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Download monthly precipitation (56.6 MB)
 #' fpath_pr <- pisco_download("monthly")
 #'

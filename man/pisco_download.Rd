@@ -52,7 +52,7 @@ to the local cache directory. If the file is already cached, download is skipped
 unless \code{overwrite = TRUE}.
 }
 \examples{
-\dontrun{
+\donttest{
 # Download monthly precipitation (56.6 MB)
 fpath_pr <- pisco_download("monthly")
 

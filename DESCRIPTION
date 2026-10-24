@@ -18,13 +18,15 @@ Authors@R: c(
 Description: Provides programmatic access, local caching, spatial subsetting,
     temporal aggregation, anomaly computation, and validation metrics for the
     Peruvian Interpolated data of SENAMHI's Climatological and hydrological
-    Observations (PISCO) developed by SENAMHI DHI-SEH. Supports the complete
-    PISCO products included in its catalog: PISCOp v3.0 precipitation,
+    Observations (PISCO) developed by SENAMHI DHI-SEH
+    <https://sites.google.com/view/dhi-seh/pisco>. Supports the complete
+    PISCO products included in its catalog: PISCOp v3.0 precipitation
+    <https://figshare.com/articles/dataset/High-resolution_grids_of_rainfall_for_Peru_-_PISCOp_v3_0_dataset/32411886>,
     PISCOt v1.2 daily temperature and climatologies, PISCOeo_pm reference
     evapotranspiration climatology, PISCO_reed v1.0 rainfall erosivity, and
     PISCO_HyM GR2M and ARNOVIC streamflow with basin and river networks,
-    hosted on Figshare and HydroShare. Includes optimized workflows
-    for basin-scale extraction, seasonal aggregations, and spatial raster and
+    hosted on Figshare <https://figshare.com/articles/dataset/PISCO_HyM_GR2M_v1_1/14382758> and HydroShare. Includes optimized workflows for
+    basin-scale extraction, seasonal aggregations, and spatial raster and
     vector processing based on 'terra' and 'sf'.
 License: MIT + file LICENSE
 URL: https://github.com/PaulESantos/rpisco
@@ -51,4 +53,4 @@ VignetteBuilder:
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-Config/roxygen2/version: 8.1.0
+Config/roxygen2/version: 8.1.1

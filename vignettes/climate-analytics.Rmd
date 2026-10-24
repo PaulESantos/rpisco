@@ -111,7 +111,8 @@ terra::ext(r_subsf)
 Visualicemos la precipitación acumulada en el mes de marzo de 1998 (pleno Fenómeno El Niño) en la grilla original y en la zona recortada:
 
 ```{r plot-clip}
-par(mfrow = c(1, 2), mar = c(3, 3, 2, 1))
+oldpar <- par(mfrow = c(1, 2), mar = c(3, 3, 2, 1))
+on.exit(par(oldpar))
 terra::plot(r_pisco[["PISCOp_1998_03"]], main = "PISCOp v3.0 (Marzo 1998)", col = hcl.colors(20, "YlGnBu", rev = TRUE))
 terra::plot(r_mantaro[["PISCOp_1998_03"]], main = "Recorte Mantaro", col = hcl.colors(20, "YlGnBu", rev = TRUE))
 ```
@@ -168,7 +169,8 @@ r_anual <- pisco_aggregate(r_pisco, by = "year", fun = "sum")
 names(r_anual)
 
 # Precipitación anual del año 1997 vs 1998
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(r_anual[[2]], main = paste("Acumulado Anual:", names(r_anual)[2]), col = hcl.colors(15, "Viridis"))
 terra::plot(r_anual[[3]], main = paste("Acumulado Anual:", names(r_anual)[3]), col = hcl.colors(15, "Viridis"))
 ```
@@ -185,7 +187,8 @@ r_estacional <- pisco_aggregate(r_pisco, by = "season_senamhi", fun = "sum")
 names(r_estacional)
 
 # Gráfico de la temporada de lluvias (wet) vs estiaje (dry) para el año hidrológico 1998
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 nombres_sel <- grep("1998", names(r_estacional), value = TRUE)
 terra::plot(r_estacional[[nombres_sel[2]]], main = nombres_sel[2], col = hcl.colors(15, "Blues", rev = TRUE))
 terra::plot(r_estacional[[nombres_sel[1]]], main = nombres_sel[1], col = hcl.colors(15, "Blues", rev = TRUE))
@@ -199,7 +202,8 @@ También es posible obtener las normales mensuales medias (12 capas, Enero a Dic
 r_ciclo <- pisco_aggregate(r_pisco, by = "month", fun = "mean")
 names(r_ciclo)
 
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(r_ciclo[["Feb"]], main = "Climatología Febrero (Pico Lluvias)", col = hcl.colors(15, "YlGnBu", rev = TRUE))
 terra::plot(r_ciclo[["Jul"]], main = "Climatología Julio (Estiaje)", col = hcl.colors(15, "YlGnBu", rev = TRUE))
 ```
@@ -227,7 +231,8 @@ anom_pct <- pisco_anomaly(r_pisco[["PISCOp_1998_03"]], baseline = linea_base, ty
 Visualización de las anomalías:
 
 ```{r plot-anomaly}
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(anom_abs, main = "Anomalía Absoluta Mar 1998 (mm)", col = hcl.colors(20, "Tropic"))
 terra::plot(anom_pct, main = "Anomalía Porcentual Mar 1998 (%)", col = hcl.colors(20, "PiYG"))
 ```

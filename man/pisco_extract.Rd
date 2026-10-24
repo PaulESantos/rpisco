@@ -27,12 +27,11 @@ Extracts precipitation time series from a PISCO \link[terra:SpatRaster]{terra::S
 coordinates or computes zonal summaries (e.g. areal mean) over spatial polygons.
 }
 \examples{
-\dontrun{
+\donttest{
 r <- pisco_read("monthly")
 # Extract at point coordinates (Cusco)
 df_pt <- pisco_extract(r, points = c(-71.96, -13.53))
-
-# Extract areal mean over watershed polygons
-# df_basin <- pisco_extract(r, polygons = basins_sf, id_col = "basin_name")
 }
+# To extract areal means over polygons, provide an sf object:
+# df_basin <- pisco_extract(r, polygons = basins_sf, id_col = "basin_name")
 }

@@ -311,7 +311,7 @@ pisco_citation <- function(dataset = c("all", "precipitation", "temperature",
       erosivity = text_erosivity,
       streamflow = text_streamflow
     )
-    cat(chosen, "\n")
+    message(chosen)
     return(invisible(chosen))
   }
   
@@ -325,7 +325,7 @@ pisco_citation <- function(dataset = c("all", "precipitation", "temperature",
       erosivity = bib_erosivity,
       streamflow = bib_streamflow
     )
-    cat(chosen, "\n")
+    message(chosen)
     return(invisible(chosen))
   }
 }

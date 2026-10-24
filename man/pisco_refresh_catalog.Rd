@@ -21,7 +21,7 @@ operation retrieves metadata only; it never downloads a PISCO data file.
 It is opt-in so package loading and ordinary reads remain offline.
 }
 \examples{
-\dontrun{
+\donttest{
 pisco_refresh_catalog()
 }
 }

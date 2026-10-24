@@ -21,7 +21,7 @@
 #' @return An aggregated [terra::SpatRaster].
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' r <- pisco_read("monthly")
 #' # Annual rainfall accumulation (mm/year)
 #' r_ann <- pisco_aggregate(r, by = "year", fun = "sum")
@@ -110,7 +110,7 @@ pisco_aggregate <- function(x,
 #' @return A [terra::SpatRaster] of anomalies with preserved time attributes.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' r_m <- pisco_read("monthly", dates = c(1997, 1998))
 #' r_clim <- pisco_read("climatology")
 #'

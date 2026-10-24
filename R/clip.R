@@ -16,14 +16,13 @@
 #' @return A cropped (and optionally masked) [terra::SpatRaster].
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' r <- pisco_read("monthly")
 #' # Crop by bounding box (e.g. Lima / Rimac basin)
 #' r_sub <- pisco_clip(r, mask = c(-77.5, -12.5, -76.0, -11.5))
-#'
-#' # Crop and mask using an sf polygon
-#' # r_basin <- pisco_clip(r, mask = basin_sf)
 #' }
+#' # To crop and mask using an sf polygon, pass an sf object as the mask argument:
+#' # r_basin <- pisco_clip(r, mask = basin_sf)
 pisco_clip <- function(x, mask, crop_only = FALSE, touches = TRUE, ...) {
   if (!inherits(x, "SpatRaster")) {
     cli::cli_abort("Argument `x` must be a `terra::SpatRaster`.")

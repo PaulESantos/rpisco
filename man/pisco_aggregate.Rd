@@ -37,7 +37,7 @@ Aggregates a PISCO \link[terra:SpatRaster]{terra::SpatRaster} across time: annua
 multi-year climatology, or SENAMHI hydrological seasons (Wet: Nov–Apr, Dry: May–Oct).
 }
 \examples{
-\dontrun{
+\donttest{
 r <- pisco_read("monthly")
 # Annual rainfall accumulation (mm/year)
 r_ann <- pisco_aggregate(r, by = "year", fun = "sum")

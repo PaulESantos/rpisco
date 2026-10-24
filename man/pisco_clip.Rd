@@ -28,12 +28,11 @@ Crops and masks a PISCO \link[terra:SpatRaster]{terra::SpatRaster} using a vecto
 an \code{sf::st_bbox} object, or a spatial bounding box numeric vector.
 }
 \examples{
-\dontrun{
+\donttest{
 r <- pisco_read("monthly")
 # Crop by bounding box (e.g. Lima / Rimac basin)
 r_sub <- pisco_clip(r, mask = c(-77.5, -12.5, -76.0, -11.5))
-
-# Crop and mask using an sf polygon
-# r_basin <- pisco_clip(r, mask = basin_sf)
 }
+# To crop and mask using an sf polygon, pass an sf object as the mask argument:
+# r_basin <- pisco_clip(r, mask = basin_sf)
 }
