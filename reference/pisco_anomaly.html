@@ -92,16 +92,27 @@ Default is 0.1 (mm).</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">r_m</span> <span class="op">&lt;-</span> <span class="fu"><a href="pisco_read.html">pisco_read</a></span><span class="op">(</span><span class="st">"monthly"</span>, dates <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1997</span>, <span class="fl">1998</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pisco_read("monthly", dates = c(1997, 1998)):</span> <span style="color: #BB0000;">✖</span> File not found in the local cache:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">/home/runner/.cache/R/rpisco/PISCOp_m.nc</span>.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Download it explicitly with `pisco_download('monthly')`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Or call `pisco_read('monthly', download = TRUE)` to authorize this download.</span>
 <span class="r-in"><span><span class="va">r_clim</span> <span class="op">&lt;-</span> <span class="fu"><a href="pisco_read.html">pisco_read</a></span><span class="op">(</span><span class="st">"climatology"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pisco_read("climatology"):</span> <span style="color: #BB0000;">✖</span> File not found in the local cache:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">/home/runner/.cache/R/rpisco/PISCOp_clim2.nc</span>.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Download it explicitly with `pisco_download('climatology')`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Or call `pisco_read('climatology', download = TRUE)` to authorize this</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   download.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Percentage anomaly during 1997-1998 El Nino</span></span></span>
 <span class="r-in"><span><span class="va">anom_pct</span> <span class="op">&lt;-</span> <span class="fu">pisco_anomaly</span><span class="op">(</span><span class="va">r_m</span>, baseline <span class="op">=</span> <span class="va">r_clim</span>, type <span class="op">=</span> <span class="st">"percentage"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'r_m' not found</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Absolute difference anomaly (mm)</span></span></span>
 <span class="r-in"><span><span class="va">anom_diff</span> <span class="op">&lt;-</span> <span class="fu">pisco_anomaly</span><span class="op">(</span><span class="va">r_m</span>, baseline <span class="op">=</span> <span class="va">r_clim</span>, type <span class="op">=</span> <span class="st">"difference"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'r_m' not found</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

@@ -51,14 +51,25 @@ of anomalies with preserved time attributes.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 r_m <- pisco_read("monthly", dates = c(1997, 1998))
+#> Error in pisco_read("monthly", dates = c(1997, 1998)): ✖ File not found in the local cache:
+#>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
+#> ℹ Download it explicitly with `pisco_download('monthly')`.
+#> ℹ Or call `pisco_read('monthly', download = TRUE)` to authorize this download.
 r_clim <- pisco_read("climatology")
+#> Error in pisco_read("climatology"): ✖ File not found in the local cache:
+#>   /home/runner/.cache/R/rpisco/PISCOp_clim2.nc.
+#> ℹ Download it explicitly with `pisco_download('climatology')`.
+#> ℹ Or call `pisco_read('climatology', download = TRUE)` to authorize this
+#>   download.
 
 # Percentage anomaly during 1997-1998 El Nino
 anom_pct <- pisco_anomaly(r_m, baseline = r_clim, type = "percentage")
+#> Error: object 'r_m' not found
 
 # Absolute difference anomaly (mm)
 anom_diff <- pisco_anomaly(r_m, baseline = r_clim, type = "difference")
-} # }
+#> Error: object 'r_m' not found
+# }
 ```

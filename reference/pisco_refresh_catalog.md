@@ -30,7 +30,8 @@ with refreshed metadata, invisibly.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 pisco_refresh_catalog()
-} # }
+#> ✔ Refreshed metadata for 7 PISCO file(s).
+# }
 ```

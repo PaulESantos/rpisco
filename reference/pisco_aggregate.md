@@ -56,15 +56,22 @@ An aggregated
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 r <- pisco_read("monthly")
+#> Error in pisco_read("monthly"): ✖ File not found in the local cache:
+#>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
+#> ℹ Download it explicitly with `pisco_download('monthly')`.
+#> ℹ Or call `pisco_read('monthly', download = TRUE)` to authorize this download.
 # Annual rainfall accumulation (mm/year)
 r_ann <- pisco_aggregate(r, by = "year", fun = "sum")
+#> Error: object 'r' not found
 
 # SENAMHI seasonal rainfall (Wet: Nov-Apr, Dry: May-Oct)
 r_seas <- pisco_aggregate(r, by = "season_senamhi", fun = "sum")
+#> Error: object 'r' not found
 
 # Multi-year mean monthly cycle
 r_cycle <- pisco_aggregate(r, by = "month", fun = "mean")
-} # }
+#> Error: object 'r' not found
+# }
 ```

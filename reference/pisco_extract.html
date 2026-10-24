@@ -86,14 +86,13 @@ or a numeric coordinate vector <code>c(lon, lat)</code>.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="pisco_read.html">pisco_read</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Extract at point coordinates (Cusco)</span></span></span>
 <span class="r-in"><span><span class="va">df_pt</span> <span class="op">&lt;-</span> <span class="fu">pisco_extract</span><span class="op">(</span><span class="va">r</span>, points <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">71.96</span>, <span class="op">-</span><span class="fl">13.53</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Extract areal mean over watershed polygons</span></span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># To extract areal means over polygons, provide an sf object:</span></span></span>
 <span class="r-in"><span><span class="co"># df_basin &lt;- pisco_extract(r, polygons = basins_sf, id_col = "basin_name")</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

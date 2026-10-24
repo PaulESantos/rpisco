@@ -87,14 +87,18 @@ Default is <code>TRUE</code> (matching default <code><a href="https://rspatial.g
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="pisco_read.html">pisco_read</a></span><span class="op">(</span><span class="st">"monthly"</span><span class="op">)</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in pisco_read("monthly"):</span> <span style="color: #BB0000;">✖</span> File not found in the local cache:</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB;">/home/runner/.cache/R/rpisco/PISCOp_m.nc</span>.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Download it explicitly with `pisco_download('monthly')`.</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Or call `pisco_read('monthly', download = TRUE)` to authorize this download.</span>
 <span class="r-in"><span><span class="co"># Crop by bounding box (e.g. Lima / Rimac basin)</span></span></span>
 <span class="r-in"><span><span class="va">r_sub</span> <span class="op">&lt;-</span> <span class="fu">pisco_clip</span><span class="op">(</span><span class="va">r</span>, mask <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">77.5</span>, <span class="op">-</span><span class="fl">12.5</span>, <span class="op">-</span><span class="fl">76.0</span>, <span class="op">-</span><span class="fl">11.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Crop and mask using an sf polygon</span></span></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error:</span> object 'r' not found</span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># To crop and mask using an sf polygon, pass an sf object as the mask argument:</span></span></span>
 <span class="r-in"><span><span class="co"># r_basin &lt;- pisco_clip(r, mask = basin_sf)</span></span></span>
-<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

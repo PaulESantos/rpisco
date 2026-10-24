@@ -77,14 +77,39 @@ Character. The absolute path to the downloaded (or cached) file.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Download monthly precipitation (56.6 MB)
 fpath_pr <- pisco_download("monthly")
+#> ✔ Refreshed metadata for 7 PISCO file(s).
+#> 
+#> ── Downloading PISCO dataset: monthly (PISCOp_m) ──
+#> 
+#> ℹ Variable: "precipitation" | File: "PISCOp_m.nc" | Size: ~53.98 MB
+#> ℹ Period: "1981-01 to 2025-12" | Resolution: "0.10 deg (~10 km)"
+#> ℹ Source: Figshare repository
+#> ✔ MD5 checksum verified successfully: "fbf4f19b5d537183a75d08615c404010"
+#> ✔ Dataset saved successfully to: /home/runner/.cache/R/rpisco/PISCOp_m.nc
 
 # Download climatological normal maximum temperature (0.52 MB)
 fpath_tx <- pisco_download("tmax_clim")
+#> ✔ Refreshed metadata for 7 PISCO file(s).
+#> 
+#> ── Downloading PISCO dataset: tmax_clim (PISCOt_tx_clim) ──
+#> 
+#> ℹ Variable: "temperature" | File: "tmax_mean_1981-2010_010.nc" | Size: ~0.52 MB
+#> ℹ Period: "1981-2010 normal" | Resolution: "0.10 deg (~10 km)"
+#> ℹ Source: Figshare repository
+#> ✔ Dataset saved successfully to: /home/runner/.cache/R/rpisco/tmax_mean_1981-2010_010.nc
 
 # Download rainfall erosivity R-factor (1.75 MB)
 fpath_re <- pisco_download("erosivity_r")
-} # }
+#> ✔ Refreshed metadata for 7 PISCO file(s).
+#> 
+#> ── Downloading PISCO dataset: erosivity_r (PISCOa_re) ──
+#> 
+#> ℹ Variable: "erosivity" | File: "PISCOa_re.nc" | Size: ~1.75 MB
+#> ℹ Period: "2001-2020" | Resolution: "0.10 deg (~10 km)"
+#> ℹ Source: Figshare repository
+#> ✔ Dataset saved successfully to: /home/runner/.cache/R/rpisco/PISCOa_re.nc
+# }
 ```

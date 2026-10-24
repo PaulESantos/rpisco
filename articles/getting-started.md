@@ -199,12 +199,12 @@ head(cache_info[, c("dataset", "filename", "cached", "expected_mb")])
 #> # A tibble: 6 × 4
 #>   dataset     filename                    cached expected_mb
 #>   <chr>       <chr>                       <lgl>        <dbl>
-#> 1 monthly     PISCOp_m.nc                 FALSE        56.6 
+#> 1 monthly     PISCOp_m.nc                 TRUE         56.6 
 #> 2 daily       PISCOp_d.nc                 FALSE      1527.  
 #> 3 climatology PISCOp_clim2.nc             FALSE         1.83
 #> 4 tmax_daily  tmax_daily_1981_2020_010.nc FALSE       603.  
 #> 5 tmin_daily  tmin_daily_1981_2020_010.nc FALSE       620.  
-#> 6 tmax_clim   tmax_mean_1981-2010_010.nc  FALSE         0.52
+#> 6 tmax_clim   tmax_mean_1981-2010_010.nc  TRUE          0.52
 ```
 
 ------------------------------------------------------------------------

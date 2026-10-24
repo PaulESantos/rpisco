@@ -80,7 +80,7 @@ object (for gridded data) or an `sf` object (for vector hydrography).
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 # Read monthly precipitation
 r_pr <- pisco_read("monthly")
 
@@ -89,8 +89,12 @@ r_tx <- pisco_read("tmax_clim")
 
 # Read reference evapotranspiration climatology
 r_eto <- pisco_read("eto_clim")
+#> Error in pisco_read("eto_clim"): ✖ File not found in the local cache:
+#>   /home/runner/.cache/R/rpisco/eo_mean_1981-2010.nc.
+#> ℹ Download it explicitly with `pisco_download('eto_clim')`.
+#> ℹ Or call `pisco_read('eto_clim', download = TRUE)` to authorize this download.
 
 # Read rainfall erosivity R-factor
 r_ero <- pisco_read("erosivity_r")
-} # }
+# }
 ```

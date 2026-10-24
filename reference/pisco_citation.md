@@ -94,7 +94,7 @@ pisco_citation()
 #>   dataset for Peru using a similarity-based regionalization approach and a hybrid
 #>   hydrological modeling framework. Journal of Hydrology: Regional Studies, 47, 101381.
 #>   https://doi.org/10.1016/j.ejrh.2023.101381
-#>   HydroShare: https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/ 
+#>   HydroShare: https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/
 
 # BibTeX for temperature (PISCOt v1.2)
 pisco_citation("temperature", format = "bibtex")
@@ -107,7 +107,7 @@ pisco_citation("temperature", format = "bibtex")
 #>   pages   = {847},
 #>   year    = {2023},
 #>   doi     = {10.1038/s41597-023-02777-w}
-#> } 
+#> }
 
 # Using variable = "precipitation"
 pisco_citation(variable = "precipitation")
@@ -120,7 +120,7 @@ pisco_citation(variable = "precipitation")
 #> Precipitacion horaria (PISCOp_h):
 #>   Huerta, A., Lavado-Casimiro, W., & Felipe-Obando, O. (2022). High-resolution gridded
 #>   hourly precipitation dataset for Peru (PISCOp_h). Data in Brief, 45, 108570.
-#>   https://doi.org/10.1016/j.dib.2022.108570 
+#>   https://doi.org/10.1016/j.dib.2022.108570
 
 # Citation for streamflow (PISCO_HyM)
 pisco_citation("streamflow")
@@ -136,5 +136,5 @@ pisco_citation("streamflow")
 #>   dataset for Peru using a similarity-based regionalization approach and a hybrid
 #>   hydrological modeling framework. Journal of Hydrology: Regional Studies, 47, 101381.
 #>   https://doi.org/10.1016/j.ejrh.2023.101381
-#>   HydroShare: https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/ 
+#>   HydroShare: https://www.hydroshare.org/resource/f723d6c762ca45b6936dd9489bc44842/
 ```

@@ -126,12 +126,19 @@ Visualicemos la precipitación acumulada en el mes de marzo de 1998
 
 ``` r
 
-par(mfrow = c(1, 2), mar = c(3, 3, 2, 1))
+oldpar <- par(mfrow = c(1, 2), mar = c(3, 3, 2, 1))
+on.exit(par(oldpar))
 terra::plot(r_pisco[["PISCOp_1998_03"]], main = "PISCOp v3.0 (Marzo 1998)", col = hcl.colors(20, "YlGnBu", rev = TRUE))
-terra::plot(r_mantaro[["PISCOp_1998_03"]], main = "Recorte Mantaro", col = hcl.colors(20, "YlGnBu", rev = TRUE))
 ```
 
 ![](climate-analytics_files/figure-html/plot-clip-1.png)
+
+``` r
+
+terra::plot(r_mantaro[["PISCOp_1998_03"]], main = "Recorte Mantaro", col = hcl.colors(20, "YlGnBu", rev = TRUE))
+```
+
+![](climate-analytics_files/figure-html/plot-clip-2.png)
 
 ------------------------------------------------------------------------
 
@@ -205,12 +212,19 @@ names(r_anual)
 #> [1] "X1996" "X1997" "X1998"
 
 # Precipitación anual del año 1997 vs 1998
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(r_anual[[2]], main = paste("Acumulado Anual:", names(r_anual)[2]), col = hcl.colors(15, "Viridis"))
-terra::plot(r_anual[[3]], main = paste("Acumulado Anual:", names(r_anual)[3]), col = hcl.colors(15, "Viridis"))
 ```
 
 ![](climate-analytics_files/figure-html/agg-year-1.png)
+
+``` r
+
+terra::plot(r_anual[[3]], main = paste("Acumulado Anual:", names(r_anual)[3]), col = hcl.colors(15, "Viridis"))
+```
+
+![](climate-analytics_files/figure-html/agg-year-2.png)
 
 ### Agregación Estacional según Criterio Oficial del SENAMHI
 
@@ -231,13 +245,20 @@ names(r_estacional)
 #> [7] "X1999_wet_Nov_Apr"
 
 # Gráfico de la temporada de lluvias (wet) vs estiaje (dry) para el año hidrológico 1998
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 nombres_sel <- grep("1998", names(r_estacional), value = TRUE)
 terra::plot(r_estacional[[nombres_sel[2]]], main = nombres_sel[2], col = hcl.colors(15, "Blues", rev = TRUE))
-terra::plot(r_estacional[[nombres_sel[1]]], main = nombres_sel[1], col = hcl.colors(15, "Blues", rev = TRUE))
 ```
 
 ![](climate-analytics_files/figure-html/agg-season-1.png)
+
+``` r
+
+terra::plot(r_estacional[[nombres_sel[1]]], main = nombres_sel[1], col = hcl.colors(15, "Blues", rev = TRUE))
+```
+
+![](climate-analytics_files/figure-html/agg-season-2.png)
 
 ### Ciclo Anual Medio Multianual (Climatología Mensual)
 
@@ -250,12 +271,19 @@ r_ciclo <- pisco_aggregate(r_pisco, by = "month", fun = "mean")
 names(r_ciclo)
 #>  [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov" "Dec"
 
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(r_ciclo[["Feb"]], main = "Climatología Febrero (Pico Lluvias)", col = hcl.colors(15, "YlGnBu", rev = TRUE))
-terra::plot(r_ciclo[["Jul"]], main = "Climatología Julio (Estiaje)", col = hcl.colors(15, "YlGnBu", rev = TRUE))
 ```
 
 ![](climate-analytics_files/figure-html/agg-climatology-1.png)
+
+``` r
+
+terra::plot(r_ciclo[["Jul"]], main = "Climatología Julio (Estiaje)", col = hcl.colors(15, "YlGnBu", rev = TRUE))
+```
+
+![](climate-analytics_files/figure-html/agg-climatology-2.png)
 
 ------------------------------------------------------------------------
 
@@ -285,12 +313,19 @@ Visualización de las anomalías:
 
 ``` r
 
-par(mfrow = c(1, 2))
+oldpar <- par(mfrow = c(1, 2))
+on.exit(par(oldpar))
 terra::plot(anom_abs, main = "Anomalía Absoluta Mar 1998 (mm)", col = hcl.colors(20, "Tropic"))
-terra::plot(anom_pct, main = "Anomalía Porcentual Mar 1998 (%)", col = hcl.colors(20, "PiYG"))
 ```
 
 ![](climate-analytics_files/figure-html/plot-anomaly-1.png)
+
+``` r
+
+terra::plot(anom_pct, main = "Anomalía Porcentual Mar 1998 (%)", col = hcl.colors(20, "PiYG"))
+```
+
+![](climate-analytics_files/figure-html/plot-anomaly-2.png)
 
 En la siguiente viñeta se muestra cómo integrar estos análisis con
 polígonos de cuencas hidrológicas y redes fluviales utilizando los

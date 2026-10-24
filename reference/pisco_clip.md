@@ -53,12 +53,16 @@ A cropped (and optionally masked)
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 r <- pisco_read("monthly")
+#> Error in pisco_read("monthly"): ✖ File not found in the local cache:
+#>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
+#> ℹ Download it explicitly with `pisco_download('monthly')`.
+#> ℹ Or call `pisco_read('monthly', download = TRUE)` to authorize this download.
 # Crop by bounding box (e.g. Lima / Rimac basin)
 r_sub <- pisco_clip(r, mask = c(-77.5, -12.5, -76.0, -11.5))
-
-# Crop and mask using an sf polygon
+#> Error: object 'r' not found
+# }
+# To crop and mask using an sf polygon, pass an sf object as the mask argument:
 # r_basin <- pisco_clip(r, mask = basin_sf)
-} # }
 ```
