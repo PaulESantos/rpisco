@@ -53,16 +53,28 @@ A cropped (and optionally masked)
 ## Examples
 
 ``` r
+# Toy SpatRaster
+r <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                 resolution = 0.5, crs = "EPSG:4326")
+terra::values(r) <- seq_len(terra::ncell(r))
+
+# Crop by bounding box (c(xmin, ymin, xmax, ymax))
+r_sub <- pisco_clip(r, mask = c(-78, -12, -76, -10))
+
+# Crop and mask using an sf polygon
+pt <- sf::st_point(c(-75, -10))
+poly_sf <- sf::st_sf(data.frame(id = 1),
+                     geometry = sf::st_sfc(sf::st_buffer(pt, 1), crs = 4326))
+r_basin <- pisco_clip(r, mask = poly_sf)
+
 # \donttest{
-r <- pisco_read("monthly")
+# Real PISCO download
+r_pisco <- pisco_read("monthly")
 #> Error in pisco_read("monthly"): ✖ File not found in the local cache:
 #>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
 #> ℹ Download it explicitly with `pisco_download('monthly')`.
 #> ℹ Or call `pisco_read('monthly', download = TRUE)` to authorize this download.
-# Crop by bounding box (e.g. Lima / Rimac basin)
-r_sub <- pisco_clip(r, mask = c(-77.5, -12.5, -76.0, -11.5))
-#> Error: object 'r' not found
+r_sub <- pisco_clip(r_pisco, mask = c(-77.5, -12.5, -76.0, -11.5))
+#> Error: object 'r_pisco' not found
 # }
-# To crop and mask using an sf polygon, pass an sf object as the mask argument:
-# r_basin <- pisco_clip(r, mask = basin_sf)
 ```

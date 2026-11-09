@@ -56,22 +56,26 @@ An aggregated
 ## Examples
 
 ``` r
+# Toy SpatRaster with time attribute
+r <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                 resolution = 1, crs = "EPSG:4326", nlyrs = 24)
+terra::values(r) <- rep(1:24, each = terra::ncell(r))
+terra::time(r) <- seq(as.Date("2000-01-01"), by = "month", length.out = 24)
+
+# Annual rainfall accumulation (mm/year)
+r_ann <- pisco_aggregate(r, by = "year", fun = "sum")
+
+# Multi-year mean monthly cycle
+r_cycle <- pisco_aggregate(r, by = "month", fun = "mean")
+
 # \donttest{
-r <- pisco_read("monthly")
+# Real PISCO download
+r_pisco <- pisco_read("monthly")
 #> Error in pisco_read("monthly"): ✖ File not found in the local cache:
 #>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
 #> ℹ Download it explicitly with `pisco_download('monthly')`.
 #> ℹ Or call `pisco_read('monthly', download = TRUE)` to authorize this download.
-# Annual rainfall accumulation (mm/year)
-r_ann <- pisco_aggregate(r, by = "year", fun = "sum")
-#> Error: object 'r' not found
-
-# SENAMHI seasonal rainfall (Wet: Nov-Apr, Dry: May-Oct)
-r_seas <- pisco_aggregate(r, by = "season_senamhi", fun = "sum")
-#> Error: object 'r' not found
-
-# Multi-year mean monthly cycle
-r_cycle <- pisco_aggregate(r, by = "month", fun = "mean")
-#> Error: object 'r' not found
+r_seas <- pisco_aggregate(r_pisco, by = "season_senamhi", fun = "sum")
+#> Error: object 'r_pisco' not found
 # }
 ```

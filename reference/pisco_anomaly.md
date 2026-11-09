@@ -51,7 +51,26 @@ of anomalies with preserved time attributes.
 ## Examples
 
 ``` r
+# Toy SpatRasters
+r_m <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                   resolution = 1, crs = "EPSG:4326", nlyrs = 12)
+terra::values(r_m) <- rep(50, terra::ncell(r_m) * 12)
+terra::time(r_m) <- seq(as.Date("2000-01-01"), by = "month", length.out = 12)
+
+r_clim <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                      resolution = 1, crs = "EPSG:4326", nlyrs = 12)
+names(r_clim) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+terra::values(r_clim) <- rep(40, terra::ncell(r_clim) * 12)
+
+# Absolute difference anomaly
+anom_diff <- pisco_anomaly(r_m, baseline = r_clim, type = "difference")
+
+# Percentage anomaly
+anom_pct <- pisco_anomaly(r_m, baseline = r_clim, type = "percentage")
+
 # \donttest{
+# Real PISCO download
 r_m <- pisco_read("monthly", dates = c(1997, 1998))
 #> Error in pisco_read("monthly", dates = c(1997, 1998)): ✖ File not found in the local cache:
 #>   /home/runner/.cache/R/rpisco/PISCOp_m.nc.
@@ -63,13 +82,6 @@ r_clim <- pisco_read("climatology")
 #> ℹ Download it explicitly with `pisco_download('climatology')`.
 #> ℹ Or call `pisco_read('climatology', download = TRUE)` to authorize this
 #>   download.
-
-# Percentage anomaly during 1997-1998 El Nino
 anom_pct <- pisco_anomaly(r_m, baseline = r_clim, type = "percentage")
-#> Error: object 'r_m' not found
-
-# Absolute difference anomaly (mm)
-anom_diff <- pisco_anomaly(r_m, baseline = r_clim, type = "difference")
-#> Error: object 'r_m' not found
 # }
 ```
