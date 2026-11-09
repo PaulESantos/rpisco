@@ -28,11 +28,23 @@ Crops and masks a PISCO \link[terra:SpatRaster]{terra::SpatRaster} using a vecto
 an \code{sf::st_bbox} object, or a spatial bounding box numeric vector.
 }
 \examples{
+# Toy SpatRaster
+r <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                 resolution = 0.5, crs = "EPSG:4326")
+terra::values(r) <- seq_len(terra::ncell(r))
+
+# Crop by bounding box (c(xmin, ymin, xmax, ymax))
+r_sub <- pisco_clip(r, mask = c(-78, -12, -76, -10))
+
+# Crop and mask using an sf polygon
+pt <- sf::st_point(c(-75, -10))
+poly_sf <- sf::st_sf(data.frame(id = 1),
+                     geometry = sf::st_sfc(sf::st_buffer(pt, 1), crs = 4326))
+r_basin <- pisco_clip(r, mask = poly_sf)
+
 \donttest{
-r <- pisco_read("monthly")
-# Crop by bounding box (e.g. Lima / Rimac basin)
-r_sub <- pisco_clip(r, mask = c(-77.5, -12.5, -76.0, -11.5))
+# Real PISCO download
+r_pisco <- pisco_read("monthly")
+r_sub <- pisco_clip(r_pisco, mask = c(-77.5, -12.5, -76.0, -11.5))
 }
-# To crop and mask using an sf polygon, pass an sf object as the mask argument:
-# r_basin <- pisco_clip(r, mask = basin_sf)
 }

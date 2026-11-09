@@ -142,11 +142,15 @@ climatodiagrama(clima_ejemplo,
 climatodiagrama(clima_ejemplo, "Estación de ejemplo", 2000, "6") +
   ggplot2::theme(text = ggplot2::element_text(family = "serif"))
 
-\dontrun{
-# Leer los datos desde un CSV con columnas MES, TMED y PTOT
-datos <- utils::read.csv("mis_datos.csv")
+\donttest{
+# Guardar y leer datos desde un archivo temporal CSV
+tf <- tempfile(fileext = ".csv")
+utils::write.csv(clima_ejemplo, tf, row.names = FALSE)
+datos <- utils::read.csv(tf)
 g <- climatodiagrama(datos, "ROCOTAL", 2010, "6")
-ggplot2::ggsave("climatodiagrama.png", g, width = 7, height = 5.5, dpi = 300)
+tf_png <- tempfile(fileext = ".png")
+ggplot2::ggsave(tf_png, g, width = 7, height = 5.5, dpi = 300)
+unlink(c(tf, tf_png))
 }
 }
 \references{

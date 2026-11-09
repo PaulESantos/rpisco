@@ -33,14 +33,28 @@ or a multi-year monthly mean). Anomalies can be expressed in absolute difference
 or percentage deviation (\\\%).
 }
 \examples{
-\donttest{
-r_m <- pisco_read("monthly", dates = c(1997, 1998))
-r_clim <- pisco_read("climatology")
+# Toy SpatRasters
+r_m <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                   resolution = 1, crs = "EPSG:4326", nlyrs = 12)
+terra::values(r_m) <- rep(50, terra::ncell(r_m) * 12)
+terra::time(r_m) <- seq(as.Date("2000-01-01"), by = "month", length.out = 12)
 
-# Percentage anomaly during 1997-1998 El Nino
+r_clim <- terra::rast(xmin = -80, xmax = -70, ymin = -15, ymax = -5,
+                      resolution = 1, crs = "EPSG:4326", nlyrs = 12)
+names(r_clim) <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                   "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+terra::values(r_clim) <- rep(40, terra::ncell(r_clim) * 12)
+
+# Absolute difference anomaly
+anom_diff <- pisco_anomaly(r_m, baseline = r_clim, type = "difference")
+
+# Percentage anomaly
 anom_pct <- pisco_anomaly(r_m, baseline = r_clim, type = "percentage")
 
-# Absolute difference anomaly (mm)
-anom_diff <- pisco_anomaly(r_m, baseline = r_clim, type = "difference")
+\donttest{
+# Real PISCO download
+r_m <- pisco_read("monthly", dates = c(1997, 1998))
+r_clim <- pisco_read("climatology")
+anom_pct <- pisco_anomaly(r_m, baseline = r_clim, type = "percentage")
 }
 }
